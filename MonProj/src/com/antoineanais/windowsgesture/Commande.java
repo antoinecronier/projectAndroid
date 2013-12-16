@@ -11,19 +11,20 @@ public class Commande {
 	private String dateFin;
 	private String dateLivraison;
 	private int avancement;
-	private ArrayList produits;
+	private ArrayList<Produit> produits;
 	
 	/*constructor*/
 	public Commande(int id_client, String dateCreation, String dateFin,
-			String dateLivraison, int avancement) {
+			String dateLivraison, int avancement, ArrayList<Produit> produits) {
 		super();
 		this.id_client = id_client;
 		this.dateCreation = dateCreation;
 		this.dateFin = dateFin;
 		this.dateLivraison = dateLivraison;
 		this.avancement = avancement;
+		this.produits = produits;
 	}
-	
+
 	/*Getters & setters*/
 	public int getId_cmd() {
 		return id_cmd;
@@ -60,5 +61,11 @@ public class Commande {
 	}
 	public void setAvancement(int avancement) {
 		this.avancement = avancement;
+	}
+	public ArrayList<Produit> getProduits() {
+		return produits;
+	}
+	public void setProduits(ArrayList<Produit> produits) {
+		this.produits = produits;
 	}
 }
