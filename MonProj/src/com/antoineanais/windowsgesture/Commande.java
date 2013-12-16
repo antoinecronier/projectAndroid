@@ -15,7 +15,7 @@ public class Commande {
 	
 	/*constructor*/
 	public Commande(int id_client, String dateCreation, String dateFin,
-			String dateLivraison, int avancement, ArrayList<Produit> produits) {
+			String dateLivraison, int avancement, ArrayList<Produit> produits){
 		super();
 		this.id_client = id_client;
 		this.dateCreation = dateCreation;
