@@ -116,7 +116,7 @@ public class Log {
 		String[] COL = { Constantes.LOG_ID, Constantes.LOG_PRODUIT_ID,
 				Constantes.LOG_MACHINE_ID, Constantes.LOG_DUREE,
 				Constantes.LOG_DATEENTREE, Constantes.LOG_DATESORTIE };
-		String WHERE = Constantes.CLIENT_ID + " = ?";
+		String WHERE = Constantes.LOG_ID + " = ?";
 		String[] CLAUSE = { String.valueOf(getId_log()) };
 
 		monCu = db.query(Constantes.TABLE_NAME_LOG, COL, WHERE, CLAUSE,
@@ -124,49 +124,38 @@ public class Log {
 		if (monCu.moveToFirst()) {
 			do {
 				set_produit(new Produit(context, monCu.getInt(1)));
+				set_machine(new Machine(context, monCu.getInt(2)));
+				setDuree(monCu.getString(3));
+				setDateEntre(monCu.getString(4));
+				setDateSortie(monCu.getString(5));
 			} while (monCu.moveToNext());
 		}
 		db.close();
 	}
 
-	public void getClientNom(Context context) {
-		DatabaseSQLite data = new DatabaseSQLite(context,
-				Constantes.DATABASE_NAME, null, Constantes.DATABASE_VERSION);
-		SQLiteDatabase db = data.getReadableDatabase();
-
-		Cursor monCu;
-
-		String[] COL = { Constantes.CLIENT_ID, Constantes.CLIENT_NOM };
-		String WHERE = Constantes.CLIENT_NOM + " = ?";
-		String[] CLAUSE = { getNom() };
-
-		monCu = db.query(Constantes.TABLE_NAME_CLIENT, COL, WHERE, CLAUSE,
-				null, null, null);
-		if (monCu.moveToFirst()) {
-			do {
-				setId_client(monCu.getInt(0));
-			} while (monCu.moveToNext());
-		}
-		db.close();
-	}
-
-	public int upDateClient(Context context) {
+	public int upDateLog(Context context) {
 		DatabaseSQLite data = new DatabaseSQLite(context,
 				Constantes.DATABASE_NAME, null, Constantes.DATABASE_VERSION);
 		SQLiteDatabase db = data.getWritableDatabase();
 
 		int toReturn = 0;
-		String[] COL = { Constantes.CLIENT_ID, Constantes.CLIENT_NOM };
+		String[] COL = { Constantes.LOG_ID, Constantes.LOG_PRODUIT_ID,
+				Constantes.LOG_MACHINE_ID, Constantes.LOG_DUREE,
+				Constantes.LOG_DATEENTREE, Constantes.LOG_DATESORTIE };
 		String[] WHERE = {};
 
 		ContentValues content = new ContentValues();
 
-		content.put(Constantes.CLIENT_ID, getId_client());
-		content.put(Constantes.CLIENT_NOM, getNom());
-
-		toReturn += db.update(Constantes.TABLE_NAME_CLIENT, content,
+		content.put(Constantes.LOG_ID, getId_log());
+		content.put(Constantes.LOG_PRODUIT_ID, get_produit().getId_produit());
+		content.put(Constantes.LOG_MACHINE_ID, get_machine().getId_machine());
+		content.put(Constantes.LOG_DUREE, getDuree());
+		content.put(Constantes.LOG_DATEENTREE, getDateEntre());
+		content.put(Constantes.LOG_DATESORTIE, getDateSortie());
+		
+		toReturn += db.update(Constantes.TABLE_NAME_LOG, content,
 				Constantes.CLIENT_ID + " = ?",
-				new String[] { String.valueOf(getId_client()) });
+				new String[] { String.valueOf(getId_log())});
 
 		db.close();
 
@@ -178,8 +167,8 @@ public class Log {
 				Constantes.DATABASE_NAME, null, Constantes.DATABASE_VERSION);
 		SQLiteDatabase db = data.getReadableDatabase();
 
-		db.delete(Constantes.TABLE_NAME_CLIENT, Constantes.CLIENT_ID + " = ?",
-				new String[] { String.valueOf(getId_client()) });
+		db.delete(Constantes.TABLE_NAME_LOG, Constantes.LOG_ID + " = ?",
+				new String[] { String.valueOf(getId_log()) });
 
 		db.close();
 	}

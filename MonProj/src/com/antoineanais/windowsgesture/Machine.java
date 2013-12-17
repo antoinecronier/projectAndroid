@@ -7,31 +7,48 @@ import android.database.sqlite.SQLiteDatabase;
 
 public class Machine {
 
-	/*Members*/
+	/* Members */
 	private int id_machine;
+	private String nom;
 	private Zone zone;
 
-	/*Getters & setters*/
+	/* Getters & setters */
 	public int getId_machine() {
 		return id_machine;
 	}
+
 	public void setId_machine(int id_machine) {
 		this.id_machine = id_machine;
 	}
-	public Zone get_zone() {
+
+	public String getNom() {
+		return nom;
+	}
+
+	public void setNom(String nom) {
+		this.nom = nom;
+	}
+
+	public Zone getZone() {
 		return zone;
 	}
-	public void set_zone(Zone zone) {
+
+	public void setZone(Zone zone) {
 		this.zone = zone;
-	}	
-	
-	/*constructor*/
+	}
+
+	/* constructor */
 	public Machine() {
 		super();
 	}
+	public Machine(Context context, int id_machine) {
+		super();
+		this.id_machine = id_machine;
+		getProduitByID(context);
+	}
 	
 	/* Méthodes */
-	
+
 	/**
 	 * Insert une machine en base et set son id
 	 * 
@@ -42,25 +59,22 @@ public class Machine {
 				Constantes.DATABASE_NAME, null, Constantes.DATABASE_VERSION);
 		SQLiteDatabase db = data.getWritableDatabase();
 
-		String[] COL = { Constantes.ma, Constantes.PRODUIT_ETAT,
-				Constantes.PRODUIT_MATERIEL, Constantes.PRODUIT_AVANCEMENT };
+		String[] COL = { Constantes.MACHINE_ZONE_ID, Constantes.MACHINE_NAME };
 		String[] WHERE = {};
 
 		ContentValues content = new ContentValues();
 
-		content.put(Constantes.PRODUIT_TYPE, getType());
-		content.put(Constantes.PRODUIT_ETAT, getEtat());
-		content.put(Constantes.PRODUIT_MATERIEL, getMateriel());
-		content.put(Constantes.PRODUIT_AVANCEMENT, getAvancement());
+		content.put(Constantes.MACHINE_ZONE_ID, getZone().getId_zone());
+		content.put(Constantes.MACHINE_NAME, getNom());
 
-		setId_produit((int) db.insert(Constantes.TABLE_NAME_MACHINE, null,
+		setId_machine((int) db.insert(Constantes.TABLE_NAME_MACHINE, null,
 				content));
 
 		db.close();
 	}
 
 	/**
-	 * Récupère le produit depuis son ID
+	 * Récupère la machine depuis son ID
 	 * 
 	 * @param context
 	 * @param ID
@@ -72,27 +86,24 @@ public class Machine {
 
 		Cursor monCu;
 
-		String[] COL = { Constantes.PRODUIT_ID, Constantes.PRODUIT_TYPE,
-				Constantes.PRODUIT_ETAT, Constantes.PRODUIT_MATERIEL,
-				Constantes.PRODUIT_AVANCEMENT };
+		String[] COL = { Constantes.MACHINE_ID, Constantes.MACHINE_ZONE_ID,
+				Constantes.MACHINE_NAME };
 		String WHERE = Constantes.PRODUIT_ID + " = ?";
-		String[] CLAUSE = { String.valueOf(getId_produit()) };
+		String[] CLAUSE = { String.valueOf(getId_machine()) };
 
 		monCu = db.query(Constantes.TABLE_NAME_PRODUIT, COL, WHERE, CLAUSE,
 				null, null, null);
 		if (monCu.moveToFirst()) {
 			do {
-				setType(monCu.getString(1));
-				setEtat(monCu.getString(2));
-				setMateriel(monCu.getString(3));
-				setAvancement(monCu.getInt(4));
+				setZone(new Zone(monCu.getInt(1)));
+				setNom(monCu.getString(2));
 			} while (monCu.moveToNext());
 		}
 		db.close();
 	}
 
 	/**
-	 * Mise a jour des données du produit
+	 * Mise a jour des données de la machine
 	 * 
 	 * @param context
 	 * @return
@@ -103,22 +114,19 @@ public class Machine {
 		SQLiteDatabase db = data.getWritableDatabase();
 
 		int toReturn = 0;
-		String[] COL = { Constantes.PRODUIT_ID, Constantes.PRODUIT_TYPE,
-				Constantes.PRODUIT_ETAT, Constantes.PRODUIT_MATERIEL,
-				Constantes.PRODUIT_AVANCEMENT };
+		String[] COL = { Constantes.MACHINE_ID, Constantes.MACHINE_ZONE_ID,
+				Constantes.MACHINE_NAME };
 		String[] WHERE = {};
 
 		ContentValues content = new ContentValues();
 
-		content.put(Constantes.PRODUIT_ID, getId_produit());
-		content.put(Constantes.PRODUIT_TYPE, getType());
-		content.put(Constantes.PRODUIT_ETAT, getEtat());
-		content.put(Constantes.PRODUIT_MATERIEL, getMateriel());
-		content.put(Constantes.PRODUIT_AVANCEMENT, getAvancement());
+		content.put(Constantes.MACHINE_ID, getId_machine());
+		content.put(Constantes.MACHINE_ZONE_ID, getZone().getId_zone());
+		content.put(Constantes.MACHINE_NAME, getNom());
 
 		toReturn += db.update(Constantes.TABLE_NAME_PRODUIT, content,
-				Constantes.PRODUIT_ID + " = ?",
-				new String[] { String.valueOf(getId_produit()) });
+				Constantes.MACHINE_ID + " = ?",
+				new String[] { String.valueOf(getId_machine()) });
 
 		db.close();
 
@@ -126,7 +134,7 @@ public class Machine {
 	}
 
 	/**
-	 * Suppression du produit
+	 * Suppression de la machine
 	 * 
 	 * @param context
 	 */
@@ -135,9 +143,9 @@ public class Machine {
 				Constantes.DATABASE_NAME, null, Constantes.DATABASE_VERSION);
 		SQLiteDatabase db = data.getReadableDatabase();
 
-		db.delete(Constantes.TABLE_NAME_PRODUIT,
-				Constantes.PRODUIT_ID + " = ?",
-				new String[] { String.valueOf(getId_produit()) });
+		db.delete(Constantes.TABLE_NAME_MACHINE,
+				Constantes.MACHINE_ID + " = ?",
+				new String[] { String.valueOf(getId_machine()) });
 
 		db.close();
 	}

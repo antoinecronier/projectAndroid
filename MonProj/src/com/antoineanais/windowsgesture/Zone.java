@@ -6,12 +6,6 @@ public class Zone {
 	private int id_zone;
 	private  String nom;
 	
-	/*constructor*/
-	public Zone(String nom) {
-		super();
-		this.nom = nom;
-	}
-	
 	/*Getters & setters*/
 	public int getId_zone() {
 		return id_zone;
@@ -24,5 +18,11 @@ public class Zone {
 	}
 	public void setNom(String nom) {
 		this.nom = nom;
+	}
+	
+	/*constructor*/
+	public Zone(int id_zone) {
+		super();
+		this.id_zone = id_zone;
 	}
 }
