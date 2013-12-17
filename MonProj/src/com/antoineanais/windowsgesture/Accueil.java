@@ -9,7 +9,7 @@ public class Accueil extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_accueil);
+		setContentView(R.layout.login);
 	}
 
 	@Override

@@ -46,7 +46,7 @@ public class Machine {
 	public Machine(Context context, int id_machine) {
 		super();
 		this.id_machine = id_machine;
-		getProduitByID(context);
+		getMachineByID(context);
 	}
 	
 	/* Méthodes */
