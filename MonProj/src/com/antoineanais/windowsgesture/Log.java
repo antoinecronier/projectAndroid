@@ -1,5 +1,7 @@
 package com.antoineanais.windowsgesture;
 
+import java.util.ArrayList;
+
 import javax.crypto.Mac;
 
 import android.content.ContentValues;
@@ -71,7 +73,10 @@ public class Log {
 		this.duree = duree;
 		this.dateEntre = dateEntre;
 	}
-
+	public Log() {
+		super();
+	}
+	
 	/**
 	 * Insert a log
 	 * 
@@ -132,7 +137,12 @@ public class Log {
 		}
 		db.close();
 	}
-
+	
+	/**
+	 * Met a jour le log en base de donnée
+	 * @param context
+	 * @return
+	 */
 	public int upDateLog(Context context) {
 		DatabaseSQLite data = new DatabaseSQLite(context,
 				Constantes.DATABASE_NAME, null, Constantes.DATABASE_VERSION);
@@ -162,6 +172,88 @@ public class Log {
 		return toReturn;
 	}
 
+	/**
+	 * Récupère l'ensemble des logs pour un produit
+	 * @param context
+	 * @param ID
+	 * @return
+	 */
+	public ArrayList<Log> getLogstByProduitID(Context context, int ID) {
+		DatabaseSQLite data = new DatabaseSQLite(context,
+				Constantes.DATABASE_NAME, null, Constantes.DATABASE_VERSION);
+		SQLiteDatabase db = data.getReadableDatabase();
+
+		Cursor monCu;
+
+		String[] COL = { Constantes.LOG_ID, Constantes.LOG_PRODUIT_ID,
+				Constantes.LOG_MACHINE_ID, Constantes.LOG_DUREE,
+				Constantes.LOG_DATEENTREE, Constantes.LOG_DATESORTIE };
+		String WHERE = Constantes.LOG_PRODUIT_ID + " = ?";
+		String[] CLAUSE = { String.valueOf(ID) };
+
+		monCu = db.query(Constantes.TABLE_NAME_LOG, COL, WHERE, CLAUSE,
+				null, null, Constantes.LOG_DATEENTREE);
+		
+		ArrayList<Log> ListLogs = new ArrayList<Log>();
+		
+		if (monCu.moveToFirst()) {
+			do {
+				Log unListLog = new Log();
+				unListLog.set_produit(new Produit(context, monCu.getInt(1)));
+				unListLog.set_machine(new Machine(context, monCu.getInt(2)));
+				unListLog.setDuree(monCu.getString(3));
+				unListLog.setDateEntre(monCu.getString(4));
+				unListLog.setDateSortie(monCu.getString(5));
+				ListLogs.add(unListLog);
+			} while (monCu.moveToNext());
+		}
+		db.close();
+		return ListLogs;
+	}
+	
+	/**
+	 * Récupère l'ensemble des logs pour un produit
+	 * @param context
+	 * @param ID
+	 * @return
+	 */
+	public ArrayList<Log> getLogstByMachineID(Context context, int ID) {
+		DatabaseSQLite data = new DatabaseSQLite(context,
+				Constantes.DATABASE_NAME, null, Constantes.DATABASE_VERSION);
+		SQLiteDatabase db = data.getReadableDatabase();
+
+		Cursor monCu;
+
+		String[] COL = { Constantes.LOG_ID, Constantes.LOG_PRODUIT_ID,
+				Constantes.LOG_MACHINE_ID, Constantes.LOG_DUREE,
+				Constantes.LOG_DATEENTREE, Constantes.LOG_DATESORTIE };
+		String WHERE = Constantes.LOG_MACHINE_ID + " = ?";
+		String[] CLAUSE = { String.valueOf(ID) };
+
+		monCu = db.query(Constantes.TABLE_NAME_LOG, COL, WHERE, CLAUSE,
+				null, null, Constantes.LOG_DATEENTREE);
+		
+		ArrayList<Log> ListLogs = new ArrayList<Log>();
+		
+		if (monCu.moveToFirst()) {
+			do {
+				Log unListLog = new Log();
+				unListLog.set_produit(new Produit(context, monCu.getInt(1)));
+				unListLog.set_machine(new Machine(context, monCu.getInt(2)));
+				unListLog.setDuree(monCu.getString(3));
+				unListLog.setDateEntre(monCu.getString(4));
+				unListLog.setDateSortie(monCu.getString(5));
+				ListLogs.add(unListLog);
+			} while (monCu.moveToNext());
+		}
+		db.close();
+		return ListLogs;
+	}
+	
+	/**
+	 * Supprime le log de la base de donnée
+	 * @param context
+	 */
 	public void deletedLog(Context context) {
 		DatabaseSQLite data = new DatabaseSQLite(context,
 				Constantes.DATABASE_NAME, null, Constantes.DATABASE_VERSION);

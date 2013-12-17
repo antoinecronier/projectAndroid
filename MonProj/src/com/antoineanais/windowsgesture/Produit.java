@@ -72,6 +72,7 @@ public class Produit {
 	/* Construtors */
 	public Produit() {
 		super();
+		this.etat = Etat.standby.toString();
 		this.avancement = 0;
 	}
 

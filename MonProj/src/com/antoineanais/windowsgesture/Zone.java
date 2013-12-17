@@ -26,9 +26,10 @@ public class Zone {
 	}
 	
 	/*constructor*/
-	public Zone(int id_zone) {
+	public Zone(Context context, int id_zone) {
 		super();
 		this.id_zone = id_zone;
+		getZoneByID(context);
 	}
 	
 	/* Méthodes */
@@ -61,7 +62,7 @@ public class Zone {
 	 * @param context
 	 * @param ID
 	 */
-	public void getUserByID(Context context) {
+	public void getZoneByID(Context context) {
 		DatabaseSQLite data = new DatabaseSQLite(context,
 				Constantes.DATABASE_NAME, null, Constantes.DATABASE_VERSION);
 		SQLiteDatabase db = data.getReadableDatabase();
