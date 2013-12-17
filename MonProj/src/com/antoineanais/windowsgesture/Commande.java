@@ -180,7 +180,7 @@ public class Commande {
 				Constantes.COMMANDE_DATECREATION, Constantes.COMMANDE_DATEFIN,
 				Constantes.COMMANDE_DATELIVRAISON,
 				Constantes.COMMANDE_AVANCEMENT };
-		String WHERE = Constantes.CLIENT_ID + " = ?";
+		String WHERE = Constantes.COMMANDE_ID + " = ?";
 		String[] CLAUSE = { String.valueOf(ID) };
 
 		monCu = db.query(Constantes.TABLE_NAME_COMMANDE, COL, WHERE, CLAUSE,

@@ -1,5 +1,7 @@
 package com.antoineanais.windowsgesture;
 
+import java.util.ArrayList;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -79,7 +81,7 @@ public class Machine {
 	 * @param context
 	 * @param ID
 	 */
-	public void getProduitByID(Context context) {
+	public void getMachineByID(Context context) {
 		DatabaseSQLite data = new DatabaseSQLite(context,
 				Constantes.DATABASE_NAME, null, Constantes.DATABASE_VERSION);
 		SQLiteDatabase db = data.getReadableDatabase();
@@ -88,10 +90,10 @@ public class Machine {
 
 		String[] COL = { Constantes.MACHINE_ID, Constantes.MACHINE_ZONE_ID,
 				Constantes.MACHINE_NAME };
-		String WHERE = Constantes.PRODUIT_ID + " = ?";
+		String WHERE = Constantes.MACHINE_ID + " = ?";
 		String[] CLAUSE = { String.valueOf(getId_machine()) };
 
-		monCu = db.query(Constantes.TABLE_NAME_PRODUIT, COL, WHERE, CLAUSE,
+		monCu = db.query(Constantes.TABLE_NAME_MACHINE, COL, WHERE, CLAUSE,
 				null, null, null);
 		if (monCu.moveToFirst()) {
 			do {
@@ -102,6 +104,45 @@ public class Machine {
 		db.close();
 	}
 
+	/**
+	 * Récupère l'ensemble des logs pour une machine
+	 * @param context
+	 * @param ID
+	 * @return
+	 */
+	public ArrayList<Commande> getLogstByMachinetID(Context context, int ID) {
+		DatabaseSQLite data = new DatabaseSQLite(context,
+				Constantes.DATABASE_NAME, null, Constantes.DATABASE_VERSION);
+		SQLiteDatabase db = data.getReadableDatabase();
+
+		Cursor monCu;
+
+		String[] COL = { Constantes.MACHINE_ID, Constantes.MACHINE_ZONE_ID,
+				Constantes.MACHINE_NAME };
+		String WHERE = Constantes.MACHINE_ID + " = ?";
+		String[] CLAUSE = { String.valueOf(getId_machine()) };
+
+		monCu = db.query(Constantes.TABLE_NAME_MACHINE, COL, WHERE, CLAUSE,
+				null, null, null);
+		
+		ArrayList<Commande> ListCommandes = new ArrayList<Commande>();
+		
+		if (monCu.moveToFirst()) {
+			do {
+				Commande uneCommande = new Commande();
+				uneCommande.setId_cmd(monCu.getInt(0));
+				uneCommande.setClient(new Client(context, ID));
+				uneCommande.setDateCreation(monCu.getString(2));
+				uneCommande.setDateFin(monCu.getString(3));
+				uneCommande.setDateLivraison(monCu.getString(4));
+				uneCommande.setAvancement(monCu.getInt(5));
+				//TODO check for produits
+				ListCommandes.add(uneCommande);
+			} while (monCu.moveToNext());
+		}
+		db.close();
+		return ListCommandes;
+	}
 	/**
 	 * Mise a jour des données de la machine
 	 * 
@@ -124,7 +165,7 @@ public class Machine {
 		content.put(Constantes.MACHINE_ZONE_ID, getZone().getId_zone());
 		content.put(Constantes.MACHINE_NAME, getNom());
 
-		toReturn += db.update(Constantes.TABLE_NAME_PRODUIT, content,
+		toReturn += db.update(Constantes.TABLE_NAME_MACHINE, content,
 				Constantes.MACHINE_ID + " = ?",
 				new String[] { String.valueOf(getId_machine()) });
 
@@ -138,7 +179,7 @@ public class Machine {
 	 * 
 	 * @param context
 	 */
-	public void deletedClient(Context context) {
+	public void deletedMachine(Context context) {
 		DatabaseSQLite data = new DatabaseSQLite(context,
 				Constantes.DATABASE_NAME, null, Constantes.DATABASE_VERSION);
 		SQLiteDatabase db = data.getReadableDatabase();

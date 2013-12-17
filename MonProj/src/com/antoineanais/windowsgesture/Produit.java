@@ -158,7 +158,7 @@ public class Produit {
 	 * @param context
 	 * @return
 	 */
-	public int upDateClient(Context context) {
+	public int upDateProduit(Context context) {
 		DatabaseSQLite data = new DatabaseSQLite(context,
 				Constantes.DATABASE_NAME, null, Constantes.DATABASE_VERSION);
 		SQLiteDatabase db = data.getWritableDatabase();
@@ -191,7 +191,7 @@ public class Produit {
 	 * 
 	 * @param context
 	 */
-	public void deletedClient(Context context) {
+	public void deletedProduit(Context context) {
 		DatabaseSQLite data = new DatabaseSQLite(context,
 				Constantes.DATABASE_NAME, null, Constantes.DATABASE_VERSION);
 		SQLiteDatabase db = data.getReadableDatabase();

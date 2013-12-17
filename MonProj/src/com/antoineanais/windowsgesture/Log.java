@@ -154,7 +154,7 @@ public class Log {
 		content.put(Constantes.LOG_DATESORTIE, getDateSortie());
 		
 		toReturn += db.update(Constantes.TABLE_NAME_LOG, content,
-				Constantes.CLIENT_ID + " = ?",
+				Constantes.LOG_ID + " = ?",
 				new String[] { String.valueOf(getId_log())});
 
 		db.close();
@@ -162,7 +162,7 @@ public class Log {
 		return toReturn;
 	}
 
-	public void deletedClient(Context context) {
+	public void deletedLog(Context context) {
 		DatabaseSQLite data = new DatabaseSQLite(context,
 				Constantes.DATABASE_NAME, null, Constantes.DATABASE_VERSION);
 		SQLiteDatabase db = data.getReadableDatabase();
