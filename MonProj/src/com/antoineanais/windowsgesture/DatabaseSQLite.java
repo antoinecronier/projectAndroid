@@ -18,6 +18,12 @@ public class DatabaseSQLite extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		// Create BDD
 		db.execSQL(Constantes.CREATE_TABLE_USER);
+		db.execSQL(Constantes.CREATE_TABLE_CLIENT);
+		db.execSQL(Constantes.CREATE_TABLE_ZONE);
+		db.execSQL(Constantes.CREATE_TABLE_PRODUIT);
+		db.execSQL(Constantes.CREATE_TABLE_MACHINE);
+		db.execSQL(Constantes.CREATE_TABLE_COMMANDE);
+		db.execSQL(Constantes.CREATE_TABLE_LOG);
 	}
 
 	@Override

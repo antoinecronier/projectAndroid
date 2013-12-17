@@ -22,6 +22,26 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.antoineanais.windowsgesture.activities.ChoixZoneActivity"
+            android:label="@string/title_activity_choix_zone" >
+        </activity>
+        <activity
+            android:name="com.antoineanais.windowsgesture.activities.GestionPieceActivity"
+            android:label="@string/title_activity_gestion_piece" >
+        </activity>
+        <activity
+            android:name="com.antoineanais.windowsgesture.activities.AccueilQualiteActivity"
+            android:label="@string/title_activity_accueil_qualite" >
+        </activity>
+        <activity
+            android:name="com.antoineanais.windowsgesture.activities.CreerCommandeActivity"
+            android:label="@string/title_activity_creer_commande" >
+        </activity>
+        <activity
+            android:name="com.antoineanais.windowsgesture.activities.CheckRebutActivity"
+            android:label="@string/title_activity_check_rebut" >
+        </activity>
     </application>
 
 </manifest>

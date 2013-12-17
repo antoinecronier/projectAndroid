@@ -2,7 +2,7 @@ package com.antoineanais.windowsgesture;
 
 public class Constantes {
 
-	/**
+	/*
 	 * Constantes BDD
 	 */
 	// Database Version
@@ -33,6 +33,7 @@ public class Constantes {
 	// Columns name -MACHINE-
 	public static final String MACHINE_ID = "id_user";
 	public static final String MACHINE_ZONE_ID = "id_zone";
+	public static final String MACHINE_NAME = "nom";
 
 	// Columns name -COMMANDE-
 	public static final String COMMANDE_ID = "id_cmd";
@@ -100,7 +101,7 @@ public class Constantes {
 	public static final String CREATE_TABLE_COMMANDE = "CREATE TABLE "
 			+ TABLE_NAME_COMMANDE + "" + "(" + COMMANDE_ID
 			+ " INTEGER PRIMARY KEY AUTOINCREMENT," + "" + COMMANDE_CLIENT_ID
-			+ " INTEGER NOT NULL " + "" + COMMANDE_DATECREATION
+			+ " TEXT NOT NULL " + "" + COMMANDE_DATECREATION
 			+ " TEXT NOT NULL," + "" + COMMANDE_DATEFIN + " TEXT," + ""
 			+ COMMANDE_DATELIVRAISON + " TEXT," + "" + COMMANDE_AVANCEMENT
 			+ " INTEGER" + " FOREIGN KEY(" + CLIENT_ID + ") " + "REFERENCES "
