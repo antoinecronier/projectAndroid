@@ -22,7 +22,13 @@ public class Client {
 	public Client(Context context, int id){
 		super();
 		this.id_client = id;
-		getClientID(context, id);
+		getClientByID(context);
+	}
+	
+	public Client(){
+		super();
+		this.id_client = 0;
+		this.nom = "";
 	}
 	
 	/* Getters & setters */
@@ -42,6 +48,12 @@ public class Client {
 		this.nom = nom;
 	}
 
+	/* Méthodes */
+	
+	/**
+	 * Insert un client en base et set son id
+	 * @param context
+	 */
 	public void insertClient(Context context) {
 		DatabaseSQLite data = new DatabaseSQLite(context,
 				Constantes.DATABASE_NAME, null, Constantes.DATABASE_VERSION);
@@ -54,12 +66,17 @@ public class Client {
 
 		content.put(Constantes.CLIENT_NOM, getNom());
 
-		setId_client(db.insert(Constantes.TABLE_NAME_CLIENT, null, content));
+		setId_client((int)db.insert(Constantes.TABLE_NAME_CLIENT, null, content));
 		
 		db.close();
 	}
 
-	public void getClientID(Context context, int ID) {
+	/**
+	 * Récupère le nom d'un client depuis son ID
+	 * @param context
+	 * @param ID
+	 */
+	public void getClientByID(Context context) {
 		DatabaseSQLite data = new DatabaseSQLite(context,
 				Constantes.DATABASE_NAME, null, Constantes.DATABASE_VERSION);
 		SQLiteDatabase db = data.getReadableDatabase();
@@ -80,7 +97,11 @@ public class Client {
 		db.close();
 	}
 
-	public void getClientNom(Context context) {
+	/**
+	 * Récupère l'ID d'un client en fonction de son nom
+	 * @param context
+	 */
+	public void getClientByNom(Context context) {
 		DatabaseSQLite data = new DatabaseSQLite(context,
 				Constantes.DATABASE_NAME, null, Constantes.DATABASE_VERSION);
 		SQLiteDatabase db = data.getReadableDatabase();
@@ -101,13 +122,18 @@ public class Client {
 		db.close();
 	}
 	
+	/**
+	 * Mise a jour des données du client
+	 * @param context
+	 * @return
+	 */
 	public int upDateClient(Context context) {
 		DatabaseSQLite data = new DatabaseSQLite(context,
 				Constantes.DATABASE_NAME, null, Constantes.DATABASE_VERSION);
 		SQLiteDatabase db = data.getWritableDatabase();
 
 		int toReturn = 0;
-		String[] COL = { data.CLIENT_ID, data.CLIENT_NOM };
+		String[] COL = { Constantes.CLIENT_ID, Constantes.CLIENT_NOM };
 		String[] WHERE = {};
 
 		ContentValues content = new ContentValues();
@@ -124,13 +150,17 @@ public class Client {
 		return toReturn;
 	}
 
+	/**
+	 * Suppression du client
+	 * @param context
+	 */
 	public void deletedClient(Context context) {
 		DatabaseSQLite data = new DatabaseSQLite(context,
 				Constantes.DATABASE_NAME, null, Constantes.DATABASE_VERSION);
 		SQLiteDatabase db = data.getReadableDatabase();
 
 		db.delete(Constantes.TABLE_NAME_CLIENT, Constantes.CLIENT_ID + " = ?",
-				new String[] { getId_client() });
+				new String[] { String.valueOf( getId_client()) });
 
 		db.close();
 	}
