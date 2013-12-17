@@ -48,6 +48,8 @@ public class Client {
 		this.nom = nom;
 	}
 
+	/* Méthodes */
+	
 	/**
 	 * Insert un client en base et set son id
 	 * @param context

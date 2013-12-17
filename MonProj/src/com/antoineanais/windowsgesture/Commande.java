@@ -98,6 +98,8 @@ public class Commande {
 		this.produits = produits;
 	}
 
+	/* Méthodes */
+	
 	/**
 	 * Insert une commande et set son id
 	 * @param context

@@ -123,7 +123,7 @@ public class Log {
 				null, null, null);
 		if (monCu.moveToFirst()) {
 			do {
-				set_produit(new Produit() monCu.getString(1));
+				set_produit(new Produit(context, monCu.getInt(1)));
 			} while (monCu.moveToNext());
 		}
 		db.close();
