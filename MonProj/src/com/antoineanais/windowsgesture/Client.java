@@ -43,32 +43,34 @@ public class Client {
 	}
 
 	public void insertClient(Context context) {
-		dataprovider data = new dataprovider(context);
+		DatabaseSQLite data = new DatabaseSQLite(context,
+				Constantes.DATABASE_NAME, null, Constantes.DATABASE_VERSION);
 		SQLiteDatabase db = data.getWritableDatabase();
 
-		String[] COL = { data.CLIENT_NOM };
+		String[] COL = { Constantes.CLIENT_NOM };
 		String[] WHERE = {};
 
 		ContentValues content = new ContentValues();
 
-		content.put(data.CLIENT_NOM, getNom());
+		content.put(Constantes.CLIENT_NOM, getNom());
 
-		setId_client(db.insert(data.TABLE_NAME_CLIENT, null, content));
+		setId_client(db.insert(Constantes.TABLE_NAME_CLIENT, null, content));
 		
 		db.close();
 	}
 
 	public void getClientID(Context context, int ID) {
-		dataprovider data = new dataprovider(context);
+		DatabaseSQLite data = new DatabaseSQLite(context,
+				Constantes.DATABASE_NAME, null, Constantes.DATABASE_VERSION);
 		SQLiteDatabase db = data.getReadableDatabase();
 
 		Cursor monCu;
 
-		String[] COL = { data.CLIENT_ID, data.CLIENT_NOM };
-		String WHERE = data.CLIENT_ID + " = ?";
+		String[] COL = { Constantes.CLIENT_ID, Constantes.CLIENT_NOM };
+		String WHERE = Constantes.CLIENT_ID + " = ?";
 		String[] CLAUSE = { String.valueOf(getId_client()) };
 
-		monCu = db.query(data.TABLE_NAME_CLIENT, COL, WHERE, CLAUSE, null,
+		monCu = db.query(Constantes.TABLE_NAME_CLIENT, COL, WHERE, CLAUSE, null,
 				null, null);
 		if (monCu.moveToFirst()) {
 			do {
@@ -79,16 +81,17 @@ public class Client {
 	}
 
 	public void getClientNom(Context context) {
-		dataprovider data = new dataprovider(context);
+		DatabaseSQLite data = new DatabaseSQLite(context,
+				Constantes.DATABASE_NAME, null, Constantes.DATABASE_VERSION);
 		SQLiteDatabase db = data.getReadableDatabase();
 
 		Cursor monCu;
 
-		String[] COL = { data.CLIENT_ID, data.CLIENT_NOM };
-		String WHERE = data.CLIENT_NOM + " = ?";
+		String[] COL = { Constantes.CLIENT_ID, Constantes.CLIENT_NOM };
+		String WHERE = Constantes.CLIENT_NOM + " = ?";
 		String[] CLAUSE = { getNom() };
 
-		monCu = db.query(data.TABLE_NAME_CLIENT, COL, WHERE, CLAUSE, null,
+		monCu = db.query(Constantes.TABLE_NAME_CLIENT, COL, WHERE, CLAUSE, null,
 				null, null);
 		if (monCu.moveToFirst()) {
 			do {
@@ -99,7 +102,8 @@ public class Client {
 	}
 	
 	public int upDateClient(Context context) {
-		dataprovider data = new dataprovider(context);
+		DatabaseSQLite data = new DatabaseSQLite(context,
+				Constantes.DATABASE_NAME, null, Constantes.DATABASE_VERSION);
 		SQLiteDatabase db = data.getWritableDatabase();
 
 		int toReturn = 0;
@@ -108,11 +112,12 @@ public class Client {
 
 		ContentValues content = new ContentValues();
 
-		content.put(data.CLIENT_ID, getId_client());
-		content.put(data.CLIENT_NOM, getNom());
+		content.put(Constantes.CLIENT_ID, getId_client());
+		content.put(Constantes.CLIENT_NOM, getNom());
 
-		toReturn += db.update(data.TABLE_NAME_CLIENT, content, data.CLIENT_ID
-				+ " = ?", new String[] { String.valueOf(getId_client()) });
+		toReturn += db.update(Constantes.TABLE_NAME_CLIENT, content,
+				Constantes.CLIENT_ID+ " = ?", 
+				new String[] { String.valueOf(getId_client()) });
 
 		db.close();
 
@@ -120,10 +125,11 @@ public class Client {
 	}
 
 	public void deletedClient(Context context) {
-		dataprovider data = new dataprovider(context);
+		DatabaseSQLite data = new DatabaseSQLite(context,
+				Constantes.DATABASE_NAME, null, Constantes.DATABASE_VERSION);
 		SQLiteDatabase db = data.getReadableDatabase();
 
-		db.delete(data.TABLE_NAME_CLIENT, data.CLIENT_ID + " = ?",
+		db.delete(Constantes.TABLE_NAME_CLIENT, Constantes.CLIENT_ID + " = ?",
 				new String[] { getId_client() });
 
 		db.close();

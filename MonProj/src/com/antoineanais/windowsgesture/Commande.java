@@ -89,82 +89,89 @@ public class Commande {
 	}
 
 	public void insertCommand(Context context) {
-		dataprovider data = new dataprovider(context);
+		DatabaseSQLite data = new DatabaseSQLite(context, 
+				Constantes.DATABASE_NAME, null, Constantes.DATABASE_VERSION);
 		SQLiteDatabase db = data.getWritableDatabase();
 
-		String[] COL = { data.COMMANDE_ClIENT_ID, data.COMMANDE_DATECREATION,
-				data.COMMANDE_DATEFIN, data.COMMANDE_DATELIVRAISON,
-				data.COMMANDE_AVANCEMENT };
+		String[] COL = { Constantes.COMMANDE_CLIENT_ID, 
+				Constantes.COMMANDE_DATECREATION, Constantes.COMMANDE_DATEFIN, 
+				Constantes.COMMANDE_DATELIVRAISON,
+				Constantes.COMMANDE_AVANCEMENT };
 		String[] WHERE = {};
 
 		ContentValues content = new ContentValues();
 
-		content.put(data.COMMANDE_ClIENT_ID, getClient().getId_client());
-		content.put(data.COMMANDE_DATECREATION, getDateCreation());
-		content.put(data.COMMANDE_DATEFIN, getDateFin());
-		content.put(data.COMMANDE_DATELIVRAISON, getDateLivraison());
-		content.put(data.COMMANDE_AVANCEMENT, getAvancement());
+		content.put(Constantes.COMMANDE_CLIENT_ID, getClient().getId_client());
+		content.put(Constantes.COMMANDE_DATECREATION, getDateCreation());
+		content.put(Constantes.COMMANDE_DATEFIN, getDateFin());
+		content.put(Constantes.COMMANDE_DATELIVRAISON, getDateLivraison());
+		content.put(Constantes.COMMANDE_AVANCEMENT, getAvancement());
 
-		setId_cmd(db.insert(data.TABLE_NAME_COMMANDE, null, content));
+		setId_cmd((int) db.insert(Constantes.TABLE_NAME_COMMANDE, null, 
+				content));
 
 		db.close();
 	}
 
 	public void getClientID(Context context, int ID) {
-		dataprovider data = new dataprovider(context);
+		DatabaseSQLite data = new DatabaseSQLite(context,
+				Constantes.DATABASE_NAME, null, Constantes.DATABASE_VERSION);
 		SQLiteDatabase db = data.getReadableDatabase();
 
 		Cursor monCu;
 
-		String[] COL = { data.CLIENT_ID, data.CLIENT_NOM };
-		String WHERE = data.CLIENT_ID + " = ?";
-		String[] CLAUSE = { String.valueOf(getId_client()) };
+		String[] COL = { Constantes.CLIENT_ID, Constantes.CLIENT_NOM };
+		String WHERE = Constantes.CLIENT_ID + " = ?";
+		String[] CLAUSE = { String.valueOf(getClient().getId_client()) };
 
-		monCu = db.query(data.TABLE_NAME_CLIENT, COL, WHERE, CLAUSE, null,
+		monCu = db.query(Constantes.TABLE_NAME_CLIENT, COL, WHERE, CLAUSE, null,
 				null, null);
 		if (monCu.moveToFirst()) {
 			do {
-				setNom(monCu.getString(1));
+				getClient().setNom(monCu.getString(1));
 			} while (monCu.moveToNext());
 		}
 		db.close();
 	}
 
 	public void getClientNom(Context context) {
-		dataprovider data = new dataprovider(context);
+		DatabaseSQLite data = new DatabaseSQLite(context,
+				Constantes.DATABASE_NAME, null, Constantes.DATABASE_VERSION);
 		SQLiteDatabase db = data.getReadableDatabase();
 
 		Cursor monCu;
 
-		String[] COL = { data.CLIENT_ID, data.CLIENT_NOM };
-		String WHERE = data.CLIENT_NOM + " = ?";
-		String[] CLAUSE = { getNom() };
+		String[] COL = { Constantes.CLIENT_ID, Constantes.CLIENT_NOM };
+		String WHERE = Constantes.CLIENT_NOM + " = ?";
+		String[] CLAUSE = { getClient().getNom() };
 
-		monCu = db.query(data.TABLE_NAME_CLIENT, COL, WHERE, CLAUSE, null,
+		monCu = db.query(Constantes.TABLE_NAME_CLIENT, COL, WHERE, CLAUSE, null,
 				null, null);
 		if (monCu.moveToFirst()) {
 			do {
-				setId_client(monCu.getInt(0));
+				getClient().setId_client(monCu.getInt(0));
 			} while (monCu.moveToNext());
 		}
 		db.close();
 	}
 
 	public int upDateClient(Context context) {
-		dataprovider data = new dataprovider(context);
+		DatabaseSQLite data = new DatabaseSQLite(context,
+				Constantes.DATABASE_NAME, null, Constantes.DATABASE_VERSION);
 		SQLiteDatabase db = data.getWritableDatabase();
 
 		int toReturn = 0;
-		String[] COL = { data.CLIENT_ID, data.CLIENT_NOM };
+		String[] COL = { Constantes.CLIENT_ID, Constantes.CLIENT_NOM };
 		String[] WHERE = {};
 
 		ContentValues content = new ContentValues();
 
-		content.put(data.CLIENT_ID, getId_client());
-		content.put(data.CLIENT_NOM, getNom());
+		content.put(Constantes.CLIENT_ID, getClient().getId_client());
+		content.put(Constantes.CLIENT_NOM, getClient().getNom());
 
-		toReturn += db.update(data.TABLE_NAME_CLIENT, content, data.CLIENT_ID
-				+ " = ?", new String[] { String.valueOf(getId_client()) });
+		toReturn += db.update(Constantes.TABLE_NAME_CLIENT, content, 
+				Constantes.CLIENT_ID+ " = ?", 
+				new String[] { String.valueOf(getClient().getId_client()) });
 
 		db.close();
 
@@ -172,11 +179,12 @@ public class Commande {
 	}
 
 	public void deletedClient(Context context) {
-		dataprovider data = new dataprovider(context);
+		DatabaseSQLite data = new DatabaseSQLite(context,
+				Constantes.DATABASE_NAME, null, Constantes.DATABASE_VERSION);
 		SQLiteDatabase db = data.getReadableDatabase();
 
-		db.delete(data.TABLE_NAME_CLIENT, data.CLIENT_ID + " = ?",
-				new String[] { getId_client() });
+		db.delete(Constantes.TABLE_NAME_CLIENT, Constantes.CLIENT_ID + " = ?",
+				new String[] { getClient().getId_client() });
 
 		db.close();
 	}
