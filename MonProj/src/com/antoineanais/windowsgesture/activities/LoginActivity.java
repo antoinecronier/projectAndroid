@@ -2,6 +2,7 @@ package com.antoineanais.windowsgesture.activities;
 
 import java.security.KeyRep.Type;
 
+import com.antoineanais.windowsgesture.Constantes;
 import com.antoineanais.windowsgesture.R;
 import com.antoineanais.windowsgesture.R.layout;
 import com.antoineanais.windowsgesture.R.menu;
@@ -47,11 +48,6 @@ public class LoginActivity extends Activity {
 
 		monContext = (Context) this;
 
-		Bundle monBundle;
-		monBundle = this.getIntent().getExtras();
-
-		userForInstance = (User) monBundle.get("CurrentUser");
-
 		Button buttonConnexion = (Button) this.findViewById(R.id.btnConnexion);
 		buttonConnexion.setOnClickListener(new OnClickListener() {
 
@@ -83,7 +79,8 @@ public class LoginActivity extends Activity {
 								monIntent.putExtra("CurrentUser",
 										userForInstance);
 								LoginActivity.this.startActivityForResult(
-										monIntent, 1);
+										monIntent,
+										Constantes.LOGIN_ACTIVITY);
 							} catch (ClassNotFoundException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -111,24 +108,24 @@ public class LoginActivity extends Activity {
 						Intent monIntent1 = new Intent(LoginActivity.this,
 								AccueilUserActivity.class);
 						monIntent1.putExtra("CurrentUser", userForInstance);
-						LoginActivity.this
-								.startActivityForResult(monIntent1, 1);
+						LoginActivity.this.startActivityForResult(monIntent1,
+								Constantes.LOGIN_ACTIVITY);
 						break;
 
 					case 2:
 						Intent monIntent2 = new Intent(LoginActivity.this,
 								AccueilQualiteActivity.class);
 						monIntent2.putExtra("CurrentUser", userForInstance);
-						LoginActivity.this
-								.startActivityForResult(monIntent2, 1);
+						LoginActivity.this.startActivityForResult(monIntent2,
+								Constantes.LOGIN_ACTIVITY);
 						break;
 
 					case 3:
 						Intent monIntent3 = new Intent(LoginActivity.this,
 								AccueilLogicielActivity.class);
 						monIntent3.putExtra("CurrentUser", userForInstance);
-						LoginActivity.this
-								.startActivityForResult(monIntent3, 1);
+						LoginActivity.this.startActivityForResult(monIntent3,
+								Constantes.LOGIN_ACTIVITY);
 						break;
 
 					default:

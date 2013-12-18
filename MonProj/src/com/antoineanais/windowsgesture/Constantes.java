@@ -1,7 +1,7 @@
 package com.antoineanais.windowsgesture;
 
 /**
- * Constantes générales à l'application
+ * Constantes gï¿½nï¿½rales ï¿½ l'application
  */
 public class Constantes {
 

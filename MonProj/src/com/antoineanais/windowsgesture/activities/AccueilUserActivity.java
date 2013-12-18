@@ -1,5 +1,6 @@
 package com.antoineanais.windowsgesture.activities;
 
+import com.antoineanais.windowsgesture.Constantes;
 import com.antoineanais.windowsgesture.R;
 import com.antoineanais.windowsgesture.User;
 import com.antoineanais.windowsgesture.R.layout;
@@ -54,7 +55,8 @@ public class AccueilUserActivity extends Activity {
 				edit.putInt("LastCurrentUser", userForInstance.getId_user());
 				edit.putString("LastCurrentScreen",
 						AccueilUserActivity.class.toString());
-				AccueilUserActivity.this.finishActivity(21);
+				AccueilUserActivity.this
+						.finishActivity(Constantes.ACCUEIL_USER_ACTIVITY);
 			}
 		});
 	}
