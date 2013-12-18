@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.antoineanais.windowsgesture.activities.ChoixZoneActivity"
+            android:name="com.antoineanais.windowsgesture.activities.AccueilUserActivity"
             android:label="@string/title_activity_choix_zone" >
         </activity>
         <activity

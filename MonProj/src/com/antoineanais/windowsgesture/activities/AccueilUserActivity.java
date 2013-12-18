@@ -19,7 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
-public class ChoixZoneActivity extends Activity {
+public class AccueilUserActivity extends Activity {
 
 	Context monContext;
 	User userForInstance;
@@ -33,6 +33,7 @@ public class ChoixZoneActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+<<<<<<< HEAD:MonProj/src/com/antoineanais/windowsgesture/activities/ChoixZoneActivity.java
 		setContentView(R.layout.choix_zone);
 
 		monContext = (Context) this;
@@ -57,6 +58,9 @@ public class ChoixZoneActivity extends Activity {
 				ChoixZoneActivity.this.finishActivity(21);
 			}
 		});
+=======
+		setContentView(R.layout.accueil_user);
+>>>>>>> 16e9f7c1915ead1a06390e674616423b03b12489:MonProj/src/com/antoineanais/windowsgesture/activities/AccueilUserActivity.java
 	}
 
 	@Override
