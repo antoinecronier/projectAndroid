@@ -13,6 +13,8 @@
     <string name="zone">Zone  :</string>
     <string name="produit">Produit :</string>
     <string name="statut">Statut :</string>
+    <string name="commande">Commande :</string>
+    <string name="lblquantite">Quantité : </string>
     <string name="accueil_admin_qualite">Qualité</string>
     <string name="creer_commande">Création commande</string>
     <string name="verif_defaut">Vérification mise en rebut</string>
@@ -23,6 +25,13 @@
     <string name="produit_cmd">Produit </string>
     <string name="matiere">Matière </string>
     <string name="quantite">Quantité </string>
+    <string name="param_traca">Paramètrage traçabilité </string>
+    <string name="liste_commande">Liste commandes </string>
+    <string name="detail_commande">Détails commande </string>
+    <string name="accueil_logi">Gestion ligne de production </string>
+    <string name="role">Rôle </string>
+    <string name="nom_zone">Nom zone </string>
+	<string name="nom_machine">Nom machine </string>
 
     <!-- Strings boutons -->
     <string name="btn_zone_facon">Façonnage</string>
@@ -41,17 +50,30 @@
     <string name="btn_cmd_encours">Commandes en cours</string>
     <string name="btn_val_rebut">Valider rebut</string>
     <string name="btn_remise_rebut">Remettre dans le circuit</string>
-    <string name="btn_val_cmd">Valider commande </string>
+    <string name="btn_val_cmd">        Valider commande et paramètrer traçabilité	</string>
+    <string name="btn_retour_liste">Retour liste</string>
+    <string name="btn_del_cmd">Supprimer commande</string>
+    <string name="btn_ajout_user">Ajout utilisateur</string>
+    <string name="btn_ajout_zone">Ajout zone</string>
+    <string name="btn_ajout_machine">Ajout machine</string>
+    <string name="btn_val">Valider</string>
 
     <!-- Colors -->
     <color name="darkred">#780909</color>
     <color name="btn_red">#F74242</color>
     <color name="btn_green">#17A843</color>
 
-    <string name="title_activity_accueil_qualite">AccueilQualiteActivity</string>
+    <string name="title_activity_accueil_qualite">        AccueilQualiteActivity</string>
     <string name="title_activity_creer_commande">CreerCommandeActivity</string>
     <string name="title_activity_gestion_piece">GestionPieceActivity</string>
     <string name="title_activity_choix_zone">ChoixZoneActivity</string>
     <string name="title_activity_check_rebut">CheckRebutActivity</string>
+    <string name="title_activity_param_traca">ParamTracaActivity</string>
+    <string name="title_activity_list_commande">ListCommandeActivity</string>
+    <string name="title_activity_detail_commande">        DetailCommandeActivity</string>
+    <string name="title_activity_accueil_logiciel">        AccueilLogicielActivity</string>
+    <string name="title_activity_add_user">AddUserActivity</string>
+    <string name="title_activity_add_zone">AddZoneActivity</string>
+    <string name="title_activity_add_machine">AddMachineActivity</string>
 
 </resources>

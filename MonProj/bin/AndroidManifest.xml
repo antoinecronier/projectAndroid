@@ -42,6 +42,34 @@
             android:name="com.antoineanais.windowsgesture.activities.CheckRebutActivity"
             android:label="@string/title_activity_check_rebut" >
         </activity>
+        <activity
+            android:name="com.antoineanais.windowsgesture.activities.ParamTracaActivity"
+            android:label="@string/title_activity_param_traca" >
+        </activity>
+        <activity
+            android:name="com.antoineanais.windowsgesture.activities.ListCommandeActivity"
+            android:label="@string/title_activity_list_commande" >
+        </activity>
+        <activity
+            android:name="com.antoineanais.windowsgesture.activities.DetailCommandeActivity"
+            android:label="@string/title_activity_detail_commande" >
+        </activity>
+        <activity
+            android:name="com.antoineanais.windowsgesture.activities.AccueilLogicielActivity"
+            android:label="@string/title_activity_accueil_logiciel" >
+        </activity>
+        <activity
+            android:name="com.antoineanais.windowsgesture.activities.AddUserActivity"
+            android:label="@string/title_activity_add_user" >
+        </activity>
+        <activity
+            android:name="com.antoineanais.windowsgesture.activities.AddZoneActivity"
+            android:label="@string/title_activity_add_zone" >
+        </activity>
+        <activity
+            android:name="com.antoineanais.windowsgesture.activities.AddMachineActivity"
+            android:label="@string/title_activity_add_machine" >
+        </activity>
     </application>
 
 </manifest>
