@@ -1,17 +1,19 @@
 package com.antoineanais.windowsgesture.activities;
 
+import java.security.KeyRep.Type;
+
 import com.antoineanais.windowsgesture.R;
 import com.antoineanais.windowsgesture.R.layout;
 import com.antoineanais.windowsgesture.R.menu;
 import com.antoineanais.windowsgesture.User;
-import com.example.mooi.fragmentDeMooi;
-import com.example.mooi.fragmentDeMooi2;
-import com.example.mooi.maclasse;
 
 import android.os.Bundle;
+import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -20,11 +22,16 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 /**
- * Ecran utiliser pour logger l'utilisateur par leur role. Si le role est égale
- * à 0 l'utilisateur ne sera pas redirigé vers une autre page. Si le role est
- * égale à 1 l'utilisateur est définit comme étant un opérateur. Si le role est
- * égale à 2 l'utilisateur est définit comme étant un admin qualité. Si le role
- * est égale à 3 l'utilisateur est définit comme étant un admin logiciel.
+ * <br>
+ * Ecran utiliser pour logger l'utilisateur par leur role. </br> <br>
+ * Si le role est égale à 0 l'utilisateur ne sera pas redirigé vers une autre
+ * page. </br> <br>
+ * Si le role est égale à 1 l'utilisateur est définit comme étant un opérateur.
+ * </br> <br>
+ * Si le role est égale à 2 l'utilisateur est définit comme étant un admin
+ * qualité. </br> <br>
+ * Si le role est égale à 3 l'utilisateur est définit comme étant un admin
+ * logiciel.</br>
  * 
  * @author alexandre
  * 
@@ -32,6 +39,7 @@ import android.widget.Toast;
 public class LoginActivity extends Activity {
 
 	Context monContext;
+	User userForInstance;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +48,11 @@ public class LoginActivity extends Activity {
 
 		monContext = (Context) this;
 
+		Bundle monBundle;
+		monBundle = this.getIntent().getExtras();
+
+		userForInstance = (User) monBundle.get("CurrentUser");
+
 		Button buttonConnexion = (Button) this.findViewById(R.id.button1);
 		buttonConnexion.setOnClickListener(new OnClickListener() {
 
@@ -47,7 +60,7 @@ public class LoginActivity extends Activity {
 			public void onClick(View v) {
 
 				/* Remplit l'utilisateur pour le logger */
-				User userForInstance = new User(
+				userForInstance = new User(
 						((EditText) findViewById(R.id.login)).getText()
 								.toString(),
 						((EditText) findViewById(R.id.pwd)).getText()
@@ -55,52 +68,73 @@ public class LoginActivity extends Activity {
 
 				userForInstance.getUserForAuthnetification(monContext);
 
+				SharedPreferences prefs = PreferenceManager
+						.getDefaultSharedPreferences(LoginActivity.this);
+
+				if (prefs.contains("LastCurrentUser")) {
+					if (userForInstance.getId_user() == prefs.getInt(
+							"LastCurrentUser", 0)) {
+						if (prefs.contains("LastCurrentScreen")) {
+							String lastScreen = prefs.getString(
+									"LastCurrentScreen", "");
+							Intent monIntent;
+							try {
+								monIntent = new Intent(LoginActivity.this,
+										Class.forName(lastScreen));
+								monIntent.putExtra("CurrentUser",
+										userForInstance);
+								LoginActivity.this.startActivityForResult(
+										monIntent, 1);
+							} catch (ClassNotFoundException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+					}
+
+				}
+
 				/*
 				 * Test le role de l'utilisateur pour lui charger la page
 				 * souhaité
 				 */
 				if (userForInstance.getId_user() != 0) {
-					Intent monIntent = new Intent(LoginActivity.this,
-							ChoixZoneActivity.class);
-					monIntent.putExtra("CurrentUser", userForInstance);
 
 					switch (userForInstance.getRole()) {
-					case 1:
+					case 0:
+						Toast mont = Toast.makeText(LoginActivity.this,
+								"Can't redirect, please call your "
+										+ "administrator", Toast.LENGTH_LONG);
+						mont.show();
+						break;
 
+					case 1:
+						Intent monIntent1 = new Intent(LoginActivity.this,
+								ChoixZoneActivity.class);
+						monIntent1.putExtra("CurrentUser", userForInstance);
 						LoginActivity.this
-								.startActivityForResult(monIntent, 42);
+								.startActivityForResult(monIntent1, 1);
 						break;
 
 					case 2:
-
+						Intent monIntent2 = new Intent(LoginActivity.this,
+								AccueilQualiteActivity.class);
+						monIntent2.putExtra("CurrentUser", userForInstance);
 						LoginActivity.this
-								.startActivityForResult(monIntent, 42);
+								.startActivityForResult(monIntent2, 1);
+						break;
+
+					case 3:
+						Intent monIntent3 = new Intent(LoginActivity.this,
+								AccueilLogicielActivity.class);
+						monIntent3.putExtra("CurrentUser", userForInstance);
+						LoginActivity.this
+								.startActivityForResult(monIntent3, 1);
 						break;
 
 					default:
 						break;
 					}
-
-				}
-
-				if ((((EditText) findViewById(R.id.editText1)).getText()
-						.toString()).equals("imie")
-						&& (((EditText) findViewById(R.id.editText2)).getText()
-								.toString()).equals("imiePass")) {
-
-					;
-					mont.show();
-
-					Intent monI = new Intent(fragmentDeMooi.this.getActivity(),
-							fragmentDeMooi2.class);
-
-					maclasse hey = new maclasse();
-
-					hey.setTitle(((EditText) view.findViewById(R.id.editText1))
-							.getText().toString());
-
-					monI.putExtra("hey", hey);
-					fragmentDeMooi.this.startActivityForResult(monI, 42);
 				}
 			}
 		});
