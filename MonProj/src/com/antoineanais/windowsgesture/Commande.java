@@ -8,8 +8,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 /**
- * Une commande, liée a un client, représente une somme de produit, elle possède
- * un avancement ainsi que des dates de controle
+ * Une commande, liée a un client, représente une somme de produit, 
+ * elle possède * un avancement ainsi que des dates de controle
  * 
  * @author alexandre
  * 

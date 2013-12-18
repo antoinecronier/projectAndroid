@@ -1,7 +1,5 @@
 package com.antoineanais.windowsgesture;
 
-import java.util.List;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;

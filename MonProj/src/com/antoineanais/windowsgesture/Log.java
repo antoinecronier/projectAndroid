@@ -183,7 +183,7 @@ public class Log {
 		content.put(Constantes.LOG_DUREE, getDuree());
 		content.put(Constantes.LOG_DATEENTREE, getDateEntre());
 		content.put(Constantes.LOG_DATESORTIE, getDateSortie());
-		content.put(Constantes.LOG_USER_ID, getUser());
+		content.put(Constantes.LOG_USER_ID, getUser().getId_user());
 
 		toReturn += db.update(Constantes.TABLE_NAME_LOG, content,
 				Constantes.LOG_ID + " = ?",
