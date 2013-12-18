@@ -43,7 +43,7 @@ public class GestionPieceActivity extends Activity {
 				Editor edit = prefs.edit();
 				edit.putInt("LastCurrentUser", userForInstance.getId_user());
 				edit.putString("LastCurrentScreen",
-						ChoixZoneActivity.class.toString());
+						AccueilUserActivity.class.toString());
 				GestionPieceActivity.this.finishActivity(12);
 			}
 		});

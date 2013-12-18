@@ -5,24 +5,21 @@ import java.security.KeyRep.Type;
 import com.antoineanais.windowsgesture.R;
 import com.antoineanais.windowsgesture.R.layout;
 import com.antoineanais.windowsgesture.R.menu;
-<<<<<<< HEAD
 import com.antoineanais.windowsgesture.User;
-=======
->>>>>>> 16e9f7c1915ead1a06390e674616423b03b12489
 
-import android.os.Bundle;
-import android.preference.Preference;
-import android.preference.PreferenceManager;
 import android.app.Activity;
-<<<<<<< HEAD
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-=======
->>>>>>> 16e9f7c1915ead1a06390e674616423b03b12489
+import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
-<<<<<<< HEAD
 /**
  * <br>
  * Ecran utiliser pour logger l'utilisateur par leur role. </br> <br>
@@ -43,15 +40,10 @@ public class LoginActivity extends Activity {
 	Context monContext;
 	User userForInstance;
 
-=======
-public class LoginActivity extends Activity {
-
->>>>>>> 16e9f7c1915ead1a06390e674616423b03b12489
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login);
-<<<<<<< HEAD
 
 		monContext = (Context) this;
 
@@ -60,7 +52,7 @@ public class LoginActivity extends Activity {
 
 		userForInstance = (User) monBundle.get("CurrentUser");
 
-		Button buttonConnexion = (Button) this.findViewById(R.id.button1);
+		Button buttonConnexion = (Button) this.findViewById(R.id.btnConnexion);
 		buttonConnexion.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -117,7 +109,7 @@ public class LoginActivity extends Activity {
 
 					case 1:
 						Intent monIntent1 = new Intent(LoginActivity.this,
-								ChoixZoneActivity.class);
+								AccueilUserActivity.class);
 						monIntent1.putExtra("CurrentUser", userForInstance);
 						LoginActivity.this
 								.startActivityForResult(monIntent1, 1);
@@ -145,8 +137,6 @@ public class LoginActivity extends Activity {
 				}
 			}
 		});
-=======
->>>>>>> 16e9f7c1915ead1a06390e674616423b03b12489
 	}
 
 	@Override

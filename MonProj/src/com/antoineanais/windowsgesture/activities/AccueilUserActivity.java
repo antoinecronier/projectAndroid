@@ -33,8 +33,7 @@ public class AccueilUserActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-<<<<<<< HEAD:MonProj/src/com/antoineanais/windowsgesture/activities/ChoixZoneActivity.java
-		setContentView(R.layout.choix_zone);
+		setContentView(R.layout.accueil_user);
 
 		monContext = (Context) this;
 
@@ -50,17 +49,14 @@ public class AccueilUserActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				SharedPreferences prefs = PreferenceManager
-						.getDefaultSharedPreferences(ChoixZoneActivity.this);
+						.getDefaultSharedPreferences(AccueilUserActivity.this);
 				Editor edit = prefs.edit();
 				edit.putInt("LastCurrentUser", userForInstance.getId_user());
 				edit.putString("LastCurrentScreen",
-						ChoixZoneActivity.class.toString());
-				ChoixZoneActivity.this.finishActivity(21);
+						AccueilUserActivity.class.toString());
+				AccueilUserActivity.this.finishActivity(21);
 			}
 		});
-=======
-		setContentView(R.layout.accueil_user);
->>>>>>> 16e9f7c1915ead1a06390e674616423b03b12489:MonProj/src/com/antoineanais/windowsgesture/activities/AccueilUserActivity.java
 	}
 
 	@Override
