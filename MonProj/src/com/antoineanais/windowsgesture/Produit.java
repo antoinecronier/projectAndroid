@@ -26,6 +26,7 @@ public class Produit {
 	private String etat;
 	private String materiel;
 
+	private int quantite;
 	private int avancement;
 
 	/* Getters & Setters */
@@ -59,6 +60,14 @@ public class Produit {
 
 	public void setEtat(String etat) {
 		this.etat = etat;
+	}
+	
+	public int getQuantite() {
+		return quantite;
+	}
+
+	public void setQuantite(int quantite) {
+		this.quantite = quantite;
 	}
 
 	public String getMateriel() {
