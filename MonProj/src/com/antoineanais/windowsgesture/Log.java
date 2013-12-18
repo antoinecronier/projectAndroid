@@ -239,7 +239,7 @@ public class Log {
 	}
 
 	/**
-	 * Récupère l'ensemble des machines pour un produit
+	 * Récupère l'ensemble des logs pour une machine
 	 * 
 	 * @param context
 	 * @param ID
@@ -267,8 +267,54 @@ public class Log {
 		if (monCu.moveToFirst()) {
 			do {
 				Log unListLog = new Log();
-				unListLog.set_produit(new Produit(context, monCu.getInt(1), db));
-				unListLog.set_machine(new Machine(context, monCu.getInt(2), db));
+				unListLog
+						.set_produit(new Produit(context, monCu.getInt(1), db));
+				unListLog
+						.set_machine(new Machine(context, monCu.getInt(2), db));
+				unListLog.setDuree(monCu.getString(3));
+				unListLog.setDateEntre(monCu.getString(4));
+				unListLog.setDateSortie(monCu.getString(5));
+				unListLog.setUser(new User(context, monCu.getInt(6), db));
+				ListLogs.add(unListLog);
+			} while (monCu.moveToNext());
+		}
+		db.close();
+		return ListLogs;
+	}
+
+	/**
+	 * Récupère l'ensemble des logs pour un user id
+	 * 
+	 * @param context
+	 * @param ID
+	 * @return
+	 */
+	public ArrayList<Log> getLogstByUserID(Context context, int ID) {
+		DatabaseSQLite data = new DatabaseSQLite(context,
+				Constantes.DATABASE_NAME, null, Constantes.DATABASE_VERSION);
+		SQLiteDatabase db = data.getReadableDatabase();
+
+		Cursor monCu;
+
+		String[] COL = { Constantes.LOG_ID, Constantes.LOG_PRODUIT_ID,
+				Constantes.LOG_MACHINE_ID, Constantes.LOG_DUREE,
+				Constantes.LOG_DATEENTREE, Constantes.LOG_DATESORTIE,
+				Constantes.LOG_USER_ID };
+		String WHERE = Constantes.LOG_MACHINE_ID + " = ?";
+		String[] CLAUSE = { String.valueOf(ID) };
+
+		monCu = db.query(Constantes.TABLE_NAME_LOG, COL, WHERE, CLAUSE, null,
+				null, Constantes.LOG_DATEENTREE);
+
+		ArrayList<Log> ListLogs = new ArrayList<Log>();
+
+		if (monCu.moveToFirst()) {
+			do {
+				Log unListLog = new Log();
+				unListLog
+						.set_produit(new Produit(context, monCu.getInt(1), db));
+				unListLog
+						.set_machine(new Machine(context, monCu.getInt(2), db));
 				unListLog.setDuree(monCu.getString(3));
 				unListLog.setDateEntre(monCu.getString(4));
 				unListLog.setDateSortie(monCu.getString(5));

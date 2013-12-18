@@ -26,6 +26,12 @@ public class User {
 		this.role = role;
 	}
 
+	public User(Context context, int id_user, SQLiteDatabase db) {
+		super();
+		this.id_user = id_user;
+		getUserByIDForLog(context, db);
+	}
+
 	/* Getters & setters */
 	public int getId_user() {
 		return id_user;
@@ -116,6 +122,31 @@ public class User {
 		db.close();
 	}
 
+	/**
+	 * Récupère le user depuis son ID pour les listes de logs
+	 * 
+	 * @param context
+	 * @param db
+	 */
+	public void getUserByIDForLog(Context context, SQLiteDatabase db) {
+		Cursor monCu;
+
+		String[] COL = { Constantes.USER_ID, Constantes.USER_LOGIN,
+				Constantes.USER_PWD, Constantes.USER_ROLE };
+		String WHERE = Constantes.USER_ID + " = ?";
+		String[] CLAUSE = { String.valueOf(getId_user()) };
+
+		monCu = db.query(Constantes.TABLE_NAME_USER,
+				COL, WHERE, CLAUSE, null, null, null);
+		if (monCu.moveToFirst()) {
+			do {
+				setLogin(monCu.getString(1));
+				setPassword(monCu.getString(2));
+				setRole(monCu.getInt(3));
+			} while (monCu.moveToNext());
+		}
+	}
+	
 	/**
 	 * Mise a jour des données du user
 	 * 
