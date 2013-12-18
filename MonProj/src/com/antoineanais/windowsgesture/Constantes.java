@@ -1,8 +1,11 @@
 package com.antoineanais.windowsgesture;
 
+/**
+ * Constantes générales à l'application
+ */
 public class Constantes {
 
-	/*
+	/**
 	 * Constantes BDD
 	 */
 	// Database Version
@@ -54,6 +57,7 @@ public class Constantes {
 	public static final String PRODUIT_TYPE = "type";
 	public static final String PRODUIT_ETAT = "etat";
 	public static final String PRODUIT_MATERIEL = "materiel";
+	public static final String PRODUIT_COMMANDE_ID = "id_commande";
 
 	// Columns name -LOG-
 	public static final String LOG_ID = "id_log";
@@ -62,60 +66,78 @@ public class Constantes {
 	public static final String LOG_DUREE = "duree";
 	public static final String LOG_DATEENTREE = "dateEntre";
 	public static final String LOG_DATESORTIE = "dateSortie";
+	public static final String LOG_USER_ID = "id_user";
 
 	// Create Table USER
 	public static final String CREATE_TABLE_USER = "CREATE TABLE "
-			+ TABLE_NAME_USER + "" + "(" + USER_ID
-			+ " INTEGER PRIMARY KEY AUTOINCREMENT," + "" + USER_LOGIN
-			+ " TEXT NOT NULL," + "" + USER_PWD + " TEXT NOT NULL," + ""
+			+ TABLE_NAME_USER + "" + "(" 
+			+ USER_ID+ " INTEGER PRIMARY KEY AUTOINCREMENT," + "" 
+			+ USER_LOGIN+ " TEXT NOT NULL," + "" 
+			+ USER_PWD + " TEXT NOT NULL," + ""
 			+ USER_ROLE + " INTEGER NOT NULL);";
 
 	// Create Table Client
 	public static final String CREATE_TABLE_CLIENT = "CREATE TABLE "
-			+ TABLE_NAME_CLIENT + "" + "(" + CLIENT_ID
-			+ " INTEGER PRIMARY KEY AUTOINCREMENT," + "" + CLIENT_NOM
-			+ " TEXT NOT NULL);";
+			+ TABLE_NAME_CLIENT + "" + "(" 
+			+ CLIENT_ID	+ " INTEGER PRIMARY KEY AUTOINCREMENT," + "" 
+			+ CLIENT_NOM+ " TEXT NOT NULL);";
 
 	// Create Table ZONE
 	public static final String CREATE_TABLE_ZONE = "CREATE TABLE "
-			+ TABLE_NAME_ZONE + "" + "(" + ZONE_ID
-			+ " INTEGER PRIMARY KEY AUTOINCREMENT," + "" + ZONE_NOM
-			+ " TEXT NOT NULL );";
+			+ TABLE_NAME_ZONE + "" + "(" 
+			+ ZONE_ID+ " INTEGER PRIMARY KEY AUTOINCREMENT," + "" 
+			+ ZONE_NOM+ " TEXT NOT NULL );";
 
 	// Create Table PRODUIT
 	public static final String CREATE_TABLE_PRODUIT = "CREATE TABLE "
-			+ TABLE_NAME_PRODUIT + "" + "(" + PRODUIT_ID
-			+ " INTEGER PRIMARY KEY AUTOINCREMENT," + "" + PRODUIT_TYPE
-			+ " TEXT NOT NULL," + "" + PRODUIT_ETAT + " TEXT NOT NULL," + ""
-			+ PRODUIT_MATERIEL + " TEXT NOT NULL," + "" + PRODUIT_AVANCEMENT
-			+ " INTEGER );";
+			+ TABLE_NAME_PRODUIT + "" + "(" 
+			+ PRODUIT_ID+ " INTEGER PRIMARY KEY AUTOINCREMENT," + "" 
+			+ PRODUIT_TYPE+ " TEXT NOT NULL," + "" 
+			+ PRODUIT_ETAT + " TEXT NOT NULL," + ""
+			+ PRODUIT_MATERIEL + " TEXT NOT NULL," + "" 
+			+ PRODUIT_COMMANDE_ID+ " INTEGER NOT NULL," + ""
+			+ PRODUIT_AVANCEMENT+ " INTEGER" 
+			+ " FOREIGN KEY(" + PRODUIT_COMMANDE_ID + ") "
+			+ "REFERENCES " + TABLE_NAME_COMMANDE 
+			+ "(" + COMMANDE_ID + "));";
 
 	// CREATE Table MACHINE
 	public static final String CREATE_TABLE_MACHINE = "CREATE TABLE "
-			+ TABLE_NAME_MACHINE + "" + "(" + MACHINE_ID
-			+ " INTEGER PRIMARY KEY AUTOINCREMENT," + "" + MACHINE_ZONE_ID
-			+ " INTEGER NOT NULL " + " FOREIGN KEY(" + ZONE_ID + ") "
-			+ "REFERENCES " + TABLE_NAME_ZONE + "(" + MACHINE_ZONE_ID + "));";
+			+ TABLE_NAME_MACHINE + "" + "(" 
+			+ MACHINE_ID+ " INTEGER PRIMARY KEY AUTOINCREMENT," + "" 
+			+ MACHINE_NAME + " TEXT NOT NULL," + "" 
+			+ MACHINE_ZONE_ID+ " INTEGER NOT NULL " 
+			+ " FOREIGN KEY(" + MACHINE_ZONE_ID + ") "
+			+ "REFERENCES " + TABLE_NAME_ZONE 
+			+ "(" + ZONE_ID + "));";
 
 	// CREATE Table COMMANDE
 	public static final String CREATE_TABLE_COMMANDE = "CREATE TABLE "
-			+ TABLE_NAME_COMMANDE + "" + "(" + COMMANDE_ID
-			+ " INTEGER PRIMARY KEY AUTOINCREMENT," + "" + COMMANDE_CLIENT_ID
-			+ " TEXT NOT NULL " + "" + COMMANDE_DATECREATION
-			+ " TEXT NOT NULL," + "" + COMMANDE_DATEFIN + " TEXT," + ""
-			+ COMMANDE_DATELIVRAISON + " TEXT," + "" + COMMANDE_AVANCEMENT
-			+ " INTEGER" + " FOREIGN KEY(" + CLIENT_ID + ") " + "REFERENCES "
-			+ TABLE_NAME_CLIENT + "(" + COMMANDE_CLIENT_ID + "));";
+			+ TABLE_NAME_COMMANDE + "" + "(" 
+			+ COMMANDE_ID+ " INTEGER PRIMARY KEY AUTOINCREMENT," + "" 
+			+ COMMANDE_CLIENT_ID+ " TEXT NOT NULL " + "" 
+			+ COMMANDE_DATECREATION+ " TEXT NOT NULL," + "" 
+			+ COMMANDE_DATEFIN + " TEXT," + ""
+			+ COMMANDE_DATELIVRAISON + " TEXT," + "" 
+			+ COMMANDE_AVANCEMENT+ " INTEGER" 
+			+ " FOREIGN KEY(" + COMMANDE_CLIENT_ID + ") " 
+			+ "REFERENCES "	+ TABLE_NAME_CLIENT 
+			+ "(" + CLIENT_ID + "));";
 
 	// CREATE Table LOG
 	public static final String CREATE_TABLE_LOG = "CREATE TABLE "
-			+ TABLE_NAME_LOG + "" + "(" + LOG_ID
-			+ " INTEGER PRIMARY KEY AUTOINCREMENT," + "" + LOG_PRODUIT_ID
-			+ " INTEGER NOT NULL " + "" + LOG_MACHINE_ID + " INTEGER NOT NULL "
-			+ "" + LOG_DUREE + " TEXT," + "" + LOG_DATEENTREE + " TEXT," + ""
-			+ LOG_DATESORTIE + " TEXT," + " FOREIGN KEY(" + LOG_PRODUIT_ID
-			+ ") " + "REFERENCES " + TABLE_NAME_PRODUIT + "(" + PRODUIT_ID
-			+ ")" + "FOREIGN KEY(" + LOG_MACHINE_ID + ") " + "REFERENCES "
-			+ TABLE_NAME_MACHINE + "(" + MACHINE_ID + ");";
-
+			+ TABLE_NAME_LOG + "" + "(" 
+			+ LOG_ID+ " INTEGER PRIMARY KEY AUTOINCREMENT," + "" 
+			+ LOG_PRODUIT_ID+ " INTEGER NOT NULL " + "" 
+			+ LOG_MACHINE_ID + " INTEGER NOT NULL "	+ "" 
+			+ LOG_USER_ID+ " INTEGER NOT NULL " + "" 
+			+ LOG_DUREE + " TEXT," + "" 
+			+ LOG_DATEENTREE + " TEXT," + ""
+			+ LOG_DATESORTIE + " TEXT," 
+			+ " FOREIGN KEY(" + LOG_PRODUIT_ID+ ") " 
+			+ "REFERENCES " + TABLE_NAME_PRODUIT + "(" + PRODUIT_ID+ ")" 
+			+ " FOREIGN KEY(" + LOG_USER_ID+ ") " 
+			+ "REFERENCES " + TABLE_NAME_USER + "(" + USER_ID+ ")" 
+			+ "FOREIGN KEY(" + LOG_MACHINE_ID + ") " 
+			+ "REFERENCES "	+ TABLE_NAME_MACHINE + "(" + MACHINE_ID + ");";
 }
