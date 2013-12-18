@@ -1,10 +1,19 @@
 package com.antoineanais.windowsgesture;
 
+import java.util.ArrayList;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+/**
+ * Définit un produit, un produit possède une quantité, ainsi qu'un état, un
+ * matériel et un type
+ * 
+ * @author alexandre
+ * 
+ */
 public class Produit {
 
 	/* Members */
@@ -25,6 +34,7 @@ public class Produit {
 	private String type;
 	private String etat;
 	private String materiel;
+	private int id_commande;
 
 	private int quantite;
 	private int avancement;
@@ -61,9 +71,17 @@ public class Produit {
 	public void setEtat(String etat) {
 		this.etat = etat;
 	}
-	
+
 	public int getQuantite() {
 		return quantite;
+	}
+
+	public int getId_commande() {
+		return id_commande;
+	}
+
+	public void setId_commande(int id_commande) {
+		this.id_commande = id_commande;
 	}
 
 	public void setQuantite(int quantite) {
@@ -90,7 +108,19 @@ public class Produit {
 		this.id_produit = id_produit;
 		getProduitByID(context);
 	}
-	
+
+	public Produit(Context context, int id_produit, SQLiteDatabase db) {
+		super();
+		this.id_produit = id_produit;
+		getProduitByIDForLogs(context, db);
+	}
+
+	public Produit(Context context, int id_commande, Object a) {
+		super();
+		this.id_commande = id_commande;
+		getProduitByCommandeID(context);
+	}
+
 	public Produit(int id_produit, Type type, Etat etat, Materiel materiel,
 			int avancement) {
 		super();
@@ -102,7 +132,7 @@ public class Produit {
 	}
 
 	/* Méthodes */
-	
+
 	/**
 	 * Insert un produit en base et set son id
 	 * 
@@ -114,7 +144,8 @@ public class Produit {
 		SQLiteDatabase db = data.getWritableDatabase();
 
 		String[] COL = { Constantes.PRODUIT_TYPE, Constantes.PRODUIT_ETAT,
-				Constantes.PRODUIT_MATERIEL, Constantes.PRODUIT_AVANCEMENT };
+				Constantes.PRODUIT_MATERIEL, Constantes.PRODUIT_AVANCEMENT,
+				Constantes.PRODUIT_COMMANDE_ID };
 		String[] WHERE = {};
 
 		ContentValues content = new ContentValues();
@@ -123,6 +154,7 @@ public class Produit {
 		content.put(Constantes.PRODUIT_ETAT, getEtat());
 		content.put(Constantes.PRODUIT_MATERIEL, getMateriel());
 		content.put(Constantes.PRODUIT_AVANCEMENT, getAvancement());
+		content.put(Constantes.PRODUIT_COMMANDE_ID, getId_commande());
 
 		setId_produit((int) db.insert(Constantes.TABLE_NAME_PRODUIT, null,
 				content));
@@ -134,7 +166,6 @@ public class Produit {
 	 * Récupère le produit depuis son ID
 	 * 
 	 * @param context
-	 * @param ID
 	 */
 	public void getProduitByID(Context context) {
 		DatabaseSQLite data = new DatabaseSQLite(context,
@@ -145,7 +176,7 @@ public class Produit {
 
 		String[] COL = { Constantes.PRODUIT_ID, Constantes.PRODUIT_TYPE,
 				Constantes.PRODUIT_ETAT, Constantes.PRODUIT_MATERIEL,
-				Constantes.PRODUIT_AVANCEMENT };
+				Constantes.PRODUIT_AVANCEMENT, Constantes.PRODUIT_COMMANDE_ID };
 		String WHERE = Constantes.PRODUIT_ID + " = ?";
 		String[] CLAUSE = { String.valueOf(getId_produit()) };
 
@@ -157,9 +188,74 @@ public class Produit {
 				setEtat(monCu.getString(2));
 				setMateriel(monCu.getString(3));
 				setAvancement(monCu.getInt(4));
+				setId_commande(monCu.getInt(5))
 			} while (monCu.moveToNext());
 		}
 		db.close();
+	}
+
+	/**
+	 * Récupère le produit depuis son ID pour les listes de logs
+	 * 
+	 * @param context
+	 * @param db
+	 */
+	public void getProduitByIDForLogs(Context context, SQLiteDatabase db) {
+		Cursor monCu;
+
+		String[] COL = { Constantes.PRODUIT_ID, Constantes.PRODUIT_TYPE,
+				Constantes.PRODUIT_ETAT, Constantes.PRODUIT_MATERIEL,
+				Constantes.PRODUIT_AVANCEMENT, Constantes.PRODUIT_COMMANDE_ID };
+		String WHERE = Constantes.PRODUIT_COMMANDE_ID + " = ?";
+		String[] CLAUSE = { String.valueOf(getId_commande()) };
+
+		monCu = db.query(Constantes.TABLE_NAME_PRODUIT, COL, WHERE, CLAUSE,
+				null, null, null);
+		if (monCu.moveToFirst()) {
+			do {
+				setId_produit(monCu.getInt(0));
+				setType(monCu.getString(1));
+				setEtat(monCu.getString(2));
+				setMateriel(monCu.getString(3));
+				setAvancement(monCu.getInt(4));
+			} while (monCu.moveToNext());
+		}
+	}
+
+	/**
+	 * Récupère les produits depuis l'ID de la commande
+	 * 
+	 * @param context
+	 * @return
+	 */
+	public ArrayList<Produit> getProduitByCommandeID(Context context) {
+		DatabaseSQLite data = new DatabaseSQLite(context,
+				Constantes.DATABASE_NAME, null, Constantes.DATABASE_VERSION);
+		SQLiteDatabase db = data.getReadableDatabase();
+		Cursor monCu;
+
+		String[] COL = { Constantes.PRODUIT_ID, Constantes.PRODUIT_TYPE,
+				Constantes.PRODUIT_ETAT, Constantes.PRODUIT_MATERIEL,
+				Constantes.PRODUIT_AVANCEMENT, Constantes.PRODUIT_COMMANDE_ID };
+		String WHERE = Constantes.PRODUIT_COMMANDE_ID + " = ?";
+		String[] CLAUSE = { String.valueOf(getId_commande()) };
+
+		monCu = db.query(Constantes.TABLE_NAME_PRODUIT, COL, WHERE, CLAUSE,
+				null, null, null);
+		ArrayList<Produit> produits = new ArrayList<Produit>();
+		if (monCu.moveToFirst()) {
+			do {
+				Produit monProduit = new Produit();
+				monProduit.setId_produit(monCu.getInt(0));
+				monProduit.setType(monCu.getString(1));
+				monProduit.setEtat(monCu.getString(2));
+				monProduit.setMateriel(monCu.getString(3));
+				monProduit.setAvancement(monCu.getInt(4));
+				monProduit.setId_commande(getId_commande());
+				produits.add(monProduit);
+			} while (monCu.moveToNext());
+		}
+		return produits;
 	}
 
 	/**
@@ -176,7 +272,7 @@ public class Produit {
 		int toReturn = 0;
 		String[] COL = { Constantes.PRODUIT_ID, Constantes.PRODUIT_TYPE,
 				Constantes.PRODUIT_ETAT, Constantes.PRODUIT_MATERIEL,
-				Constantes.PRODUIT_AVANCEMENT };
+				Constantes.PRODUIT_AVANCEMENT, Constantes.PRODUIT_COMMANDE_ID };
 		String[] WHERE = {};
 
 		ContentValues content = new ContentValues();
@@ -186,6 +282,7 @@ public class Produit {
 		content.put(Constantes.PRODUIT_ETAT, getEtat());
 		content.put(Constantes.PRODUIT_MATERIEL, getMateriel());
 		content.put(Constantes.PRODUIT_AVANCEMENT, getAvancement());
+		content.put(Constantes.PRODUIT_COMMANDE_ID, getId_commande());
 
 		toReturn += db.update(Constantes.TABLE_NAME_PRODUIT, content,
 				Constantes.PRODUIT_ID + " = ?",

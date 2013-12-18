@@ -7,6 +7,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+/**
+ * Une machine est nommé et rélié a une zone, on y enregistre des logs
+ * @author alexandre
+ *
+ */
 public class Machine {
 
 	/* Members */
@@ -14,7 +19,7 @@ public class Machine {
 	private String nom;
 	private Zone zone;
 	private ArrayList<Log> Logs;
-	
+
 	/* Getters & setters */
 	public int getId_machine() {
 		return id_machine;
@@ -44,12 +49,19 @@ public class Machine {
 	public Machine() {
 		super();
 	}
+
 	public Machine(Context context, int id_machine) {
 		super();
 		this.id_machine = id_machine;
 		getMachineByID(context);
 	}
-	
+
+	public Machine(Context context, int id_machine, SQLiteDatabase db) {
+		super();
+		this.id_machine = id_machine;
+		getMachineByIDForLog(context, db);
+	}
+
 	/* Méthodes */
 
 	/**
@@ -80,7 +92,6 @@ public class Machine {
 	 * Récupère la machine depuis son ID
 	 * 
 	 * @param context
-	 * @param ID
 	 */
 	public void getMachineByID(Context context) {
 		DatabaseSQLite data = new DatabaseSQLite(context,
@@ -103,6 +114,30 @@ public class Machine {
 			} while (monCu.moveToNext());
 		}
 		db.close();
+	}
+
+	/**
+	 * Récupère la machine depuis son ID pour les listes de logs
+	 * 
+	 * @param context
+	 * @param db
+	 */
+	public void getMachineByIDForLog(Context context, SQLiteDatabase db) {
+		Cursor monCu;
+
+		String[] COL = { Constantes.MACHINE_ID, Constantes.MACHINE_ZONE_ID,
+				Constantes.MACHINE_NAME };
+		String WHERE = Constantes.MACHINE_ID + " = ?";
+		String[] CLAUSE = { String.valueOf(getId_machine()) };
+
+		monCu = db.query(Constantes.TABLE_NAME_MACHINE,
+				COL, WHERE, CLAUSE, null, null, null);
+		if (monCu.moveToFirst()) {
+			do {
+				setZone(new Zone(context, monCu.getInt(1)));
+				setNom(monCu.getString(2));
+			} while (monCu.moveToNext());
+		}
 	}
 
 	/**

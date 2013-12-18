@@ -9,11 +9,19 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+/**
+ * Un log est lié a un produit et a une machine, il permet de connètre les
+ * durées de fabrication ainsi que les dates d'usinage
+ * 
+ * @author alexandre
+ * 
+ */
 public class Log {
 	/* Members */
 	private int id_log;
 	private Produit produit;
 	private Machine machine;
+	private User user;
 	private String duree;
 	private String dateEntre;
 	private String dateSortie;
@@ -47,6 +55,14 @@ public class Log {
 		return duree;
 	}
 
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
 	public void setDuree(String duree) {
 		this.duree = duree;
 	}
@@ -73,12 +89,13 @@ public class Log {
 		this.duree = duree;
 		this.dateEntre = dateEntre;
 	}
+
 	public Log() {
 		super();
 	}
-	
+
 	/**
-	 * Insert a log
+	 * Insert un log
 	 * 
 	 * @param context
 	 */
@@ -89,7 +106,7 @@ public class Log {
 
 		String[] COL = { Constantes.LOG_PRODUIT_ID, Constantes.LOG_MACHINE_ID,
 				Constantes.LOG_DUREE, Constantes.LOG_DATEENTREE,
-				Constantes.LOG_DATESORTIE };
+				Constantes.LOG_DATESORTIE, Constantes.LOG_USER_ID };
 		String[] WHERE = {};
 
 		ContentValues content = new ContentValues();
@@ -99,6 +116,7 @@ public class Log {
 		content.put(Constantes.LOG_DUREE, getDuree());
 		content.put(Constantes.LOG_DATEENTREE, getDateEntre());
 		content.put(Constantes.LOG_DATESORTIE, getDateSortie());
+		content.put(Constantes.LOG_USER_ID, getUser().getId_user());
 
 		setId_log((int) db.insert(Constantes.TABLE_NAME_LOG, null, content));
 
@@ -106,10 +124,9 @@ public class Log {
 	}
 
 	/**
-	 * Get a log using log_ID
+	 * Récupère un log par le log_ID
 	 * 
 	 * @param context
-	 * @param ID
 	 */
 	public void getLogByID(Context context) {
 		DatabaseSQLite data = new DatabaseSQLite(context,
@@ -120,26 +137,29 @@ public class Log {
 
 		String[] COL = { Constantes.LOG_ID, Constantes.LOG_PRODUIT_ID,
 				Constantes.LOG_MACHINE_ID, Constantes.LOG_DUREE,
-				Constantes.LOG_DATEENTREE, Constantes.LOG_DATESORTIE };
+				Constantes.LOG_DATEENTREE, Constantes.LOG_DATESORTIE,
+				Constantes.LOG_USER_ID };
 		String WHERE = Constantes.LOG_ID + " = ?";
 		String[] CLAUSE = { String.valueOf(getId_log()) };
 
-		monCu = db.query(Constantes.TABLE_NAME_LOG, COL, WHERE, CLAUSE,
-				null, null, null);
+		monCu = db.query(Constantes.TABLE_NAME_LOG, COL, WHERE, CLAUSE, null,
+				null, null);
 		if (monCu.moveToFirst()) {
 			do {
-				set_produit(new Produit(context, monCu.getInt(1)));
-				set_machine(new Machine(context, monCu.getInt(2)));
+				set_produit(new Produit(context, monCu.getInt(1), db));
+				set_machine(new Machine(context, monCu.getInt(2), db));
 				setDuree(monCu.getString(3));
 				setDateEntre(monCu.getString(4));
 				setDateSortie(monCu.getString(5));
+				setUser(new User(context, monCu.getInt(6), db));
 			} while (monCu.moveToNext());
 		}
 		db.close();
 	}
-	
+
 	/**
 	 * Met a jour le log en base de donnée
+	 * 
 	 * @param context
 	 * @return
 	 */
@@ -151,7 +171,8 @@ public class Log {
 		int toReturn = 0;
 		String[] COL = { Constantes.LOG_ID, Constantes.LOG_PRODUIT_ID,
 				Constantes.LOG_MACHINE_ID, Constantes.LOG_DUREE,
-				Constantes.LOG_DATEENTREE, Constantes.LOG_DATESORTIE };
+				Constantes.LOG_DATEENTREE, Constantes.LOG_DATESORTIE,
+				Constantes.LOG_USER_ID };
 		String[] WHERE = {};
 
 		ContentValues content = new ContentValues();
@@ -162,10 +183,11 @@ public class Log {
 		content.put(Constantes.LOG_DUREE, getDuree());
 		content.put(Constantes.LOG_DATEENTREE, getDateEntre());
 		content.put(Constantes.LOG_DATESORTIE, getDateSortie());
-		
+		content.put(Constantes.LOG_USER_ID, getUser());
+
 		toReturn += db.update(Constantes.TABLE_NAME_LOG, content,
 				Constantes.LOG_ID + " = ?",
-				new String[] { String.valueOf(getId_log())});
+				new String[] { String.valueOf(getId_log()) });
 
 		db.close();
 
@@ -174,6 +196,7 @@ public class Log {
 
 	/**
 	 * Récupère l'ensemble des logs pour un produit
+	 * 
 	 * @param context
 	 * @param ID
 	 * @return
@@ -187,32 +210,37 @@ public class Log {
 
 		String[] COL = { Constantes.LOG_ID, Constantes.LOG_PRODUIT_ID,
 				Constantes.LOG_MACHINE_ID, Constantes.LOG_DUREE,
-				Constantes.LOG_DATEENTREE, Constantes.LOG_DATESORTIE };
+				Constantes.LOG_DATEENTREE, Constantes.LOG_DATESORTIE,
+				Constantes.LOG_USER_ID };
 		String WHERE = Constantes.LOG_PRODUIT_ID + " = ?";
 		String[] CLAUSE = { String.valueOf(ID) };
 
-		monCu = db.query(Constantes.TABLE_NAME_LOG, COL, WHERE, CLAUSE,
-				null, null, Constantes.LOG_DATEENTREE);
-		
+		monCu = db.query(Constantes.TABLE_NAME_LOG, COL, WHERE, CLAUSE, null,
+				null, Constantes.LOG_DATEENTREE);
+
 		ArrayList<Log> ListLogs = new ArrayList<Log>();
-		
+
 		if (monCu.moveToFirst()) {
 			do {
 				Log unListLog = new Log();
-				unListLog.set_produit(new Produit(context, monCu.getInt(1)));
-				unListLog.set_machine(new Machine(context, monCu.getInt(2)));
+				unListLog
+						.set_produit(new Produit(context, monCu.getInt(1), db));
+				unListLog
+						.set_machine(new Machine(context, monCu.getInt(2), db));
 				unListLog.setDuree(monCu.getString(3));
 				unListLog.setDateEntre(monCu.getString(4));
 				unListLog.setDateSortie(monCu.getString(5));
+				unListLog.setUser(new User(context, monCu.getInt(6), db));
 				ListLogs.add(unListLog);
 			} while (monCu.moveToNext());
 		}
 		db.close();
 		return ListLogs;
 	}
-	
+
 	/**
-	 * Récupère l'ensemble des logs pour un produit
+	 * Récupère l'ensemble des machines pour un produit
+	 * 
 	 * @param context
 	 * @param ID
 	 * @return
@@ -226,32 +254,35 @@ public class Log {
 
 		String[] COL = { Constantes.LOG_ID, Constantes.LOG_PRODUIT_ID,
 				Constantes.LOG_MACHINE_ID, Constantes.LOG_DUREE,
-				Constantes.LOG_DATEENTREE, Constantes.LOG_DATESORTIE };
+				Constantes.LOG_DATEENTREE, Constantes.LOG_DATESORTIE,
+				Constantes.LOG_USER_ID };
 		String WHERE = Constantes.LOG_MACHINE_ID + " = ?";
 		String[] CLAUSE = { String.valueOf(ID) };
 
-		monCu = db.query(Constantes.TABLE_NAME_LOG, COL, WHERE, CLAUSE,
-				null, null, Constantes.LOG_DATEENTREE);
-		
+		monCu = db.query(Constantes.TABLE_NAME_LOG, COL, WHERE, CLAUSE, null,
+				null, Constantes.LOG_DATEENTREE);
+
 		ArrayList<Log> ListLogs = new ArrayList<Log>();
-		
+
 		if (monCu.moveToFirst()) {
 			do {
 				Log unListLog = new Log();
-				unListLog.set_produit(new Produit(context, monCu.getInt(1)));
-				unListLog.set_machine(new Machine(context, monCu.getInt(2)));
+				unListLog.set_produit(new Produit(context, monCu.getInt(1), db));
+				unListLog.set_machine(new Machine(context, monCu.getInt(2), db));
 				unListLog.setDuree(monCu.getString(3));
 				unListLog.setDateEntre(monCu.getString(4));
 				unListLog.setDateSortie(monCu.getString(5));
+				unListLog.setUser(new User(context, monCu.getInt(6), db));
 				ListLogs.add(unListLog);
 			} while (monCu.moveToNext());
 		}
 		db.close();
 		return ListLogs;
 	}
-	
+
 	/**
 	 * Supprime le log de la base de donnée
+	 * 
 	 * @param context
 	 */
 	public void deletedLog(Context context) {

@@ -7,6 +7,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+/**
+ * Client definit un client (personne qui passe des commandes)
+ * @author alexandre
+ *
+ */
 public class Client {
 
 	/* Members */

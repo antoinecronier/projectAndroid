@@ -5,6 +5,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+/**
+ * Définit un utilisateur de l'application
+ * @author alexandre
+ *
+ */
 public class User {
 
 	/* Members */

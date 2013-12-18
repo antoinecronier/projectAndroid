@@ -7,6 +7,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+/**
+ * Une commande, liée a un client, représente une somme de produit, elle possède
+ * un avancement ainsi que des dates de controle
+ * 
+ * @author alexandre
+ * 
+ */
 public class Commande {
 
 	/* Members */
@@ -40,7 +47,12 @@ public class Commande {
 		this.avancement = 0;
 		this.produits = new ArrayList<Produit>();
 	}
-	
+
+	public Commande(int id_cmd) {
+		super();
+		this.id_cmd = id_cmd;
+	}
+
 	/* Getters & setters */
 	public int getId_cmd() {
 		return id_cmd;
@@ -99,9 +111,10 @@ public class Commande {
 	}
 
 	/* Méthodes */
-	
+
 	/**
 	 * Insert une commande et set son id
+	 * 
 	 * @param context
 	 */
 	public void insertCommand(Context context) {
@@ -131,8 +144,8 @@ public class Commande {
 
 	/**
 	 * Récupère une commande par l'ID
+	 * 
 	 * @param context
-	 * @param ID
 	 */
 	public void getCommandeByID(Context context) {
 		DatabaseSQLite data = new DatabaseSQLite(context,
@@ -145,7 +158,7 @@ public class Commande {
 				Constantes.COMMANDE_DATECREATION, Constantes.COMMANDE_DATEFIN,
 				Constantes.COMMANDE_DATELIVRAISON,
 				Constantes.COMMANDE_AVANCEMENT };
-		
+
 		String WHERE = Constantes.COMMANDE_ID + " = ?";
 		String[] CLAUSE = { String.valueOf(getId_cmd()) };
 
@@ -157,7 +170,7 @@ public class Commande {
 				setDateFin(monCu.getString(2));
 				setDateLivraison(monCu.getString(3));
 				setAvancement(monCu.getInt(4));
-				//TODO check for produits
+				// TODO check for produits
 			} while (monCu.moveToNext());
 		}
 		db.close();
@@ -165,6 +178,7 @@ public class Commande {
 
 	/**
 	 * Récupère l'ensemble des commandes pour un client
+	 * 
 	 * @param context
 	 * @param ID
 	 * @return
@@ -180,14 +194,14 @@ public class Commande {
 				Constantes.COMMANDE_DATECREATION, Constantes.COMMANDE_DATEFIN,
 				Constantes.COMMANDE_DATELIVRAISON,
 				Constantes.COMMANDE_AVANCEMENT };
-		String WHERE = Constantes.COMMANDE_ID + " = ?";
+		String WHERE = Constantes.COMMANDE_CLIENT_ID + " = ?";
 		String[] CLAUSE = { String.valueOf(ID) };
 
 		monCu = db.query(Constantes.TABLE_NAME_COMMANDE, COL, WHERE, CLAUSE,
 				null, null, null);
-		
+
 		ArrayList<Commande> ListCommandes = new ArrayList<Commande>();
-		
+
 		if (monCu.moveToFirst()) {
 			do {
 				Commande uneCommande = new Commande();
@@ -197,7 +211,6 @@ public class Commande {
 				uneCommande.setDateFin(monCu.getString(3));
 				uneCommande.setDateLivraison(monCu.getString(4));
 				uneCommande.setAvancement(monCu.getInt(5));
-				//TODO check for produits
 				ListCommandes.add(uneCommande);
 			} while (monCu.moveToNext());
 		}
@@ -207,6 +220,7 @@ public class Commande {
 
 	/**
 	 * Met à jour la commande
+	 * 
 	 * @param context
 	 * @return
 	 */
@@ -233,7 +247,7 @@ public class Commande {
 
 		toReturn += db.update(Constantes.TABLE_NAME_COMMANDE, content,
 				Constantes.COMMANDE_ID + " = ?",
-				new String[] { String.valueOf(getId_cmd())});
+				new String[] { String.valueOf(getId_cmd()) });
 
 		db.close();
 
@@ -242,6 +256,7 @@ public class Commande {
 
 	/**
 	 * Supprime la commande
+	 * 
 	 * @param context
 	 */
 	public void deletedCommande(Context context) {
@@ -249,8 +264,8 @@ public class Commande {
 				Constantes.DATABASE_NAME, null, Constantes.DATABASE_VERSION);
 		SQLiteDatabase db = data.getReadableDatabase();
 
-		db.delete(Constantes.TABLE_NAME_COMMANDE, Constantes.COMMANDE_ID + " = ?",
-				new String[] { String.valueOf(getId_cmd())});
+		db.delete(Constantes.TABLE_NAME_COMMANDE, Constantes.COMMANDE_ID
+				+ " = ?", new String[] { String.valueOf(getId_cmd()) });
 
 		db.close();
 	}
