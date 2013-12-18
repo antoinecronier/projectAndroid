@@ -1,5 +1,7 @@
 package com.antoineanais.windowsgesture;
 
+import java.io.Serializable;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -7,11 +9,17 @@ import android.database.sqlite.SQLiteDatabase;
 
 /**
  * Définit un utilisateur de l'application
+ * 
  * @author alexandre
- *
+ * 
  */
-public class User {
+public class User implements Serializable{
 
+	/**
+	 * Serializable UID
+	 */
+	private static final long serialVersionUID = -3185036184140455157L;
+	
 	/* Members */
 	private int id_user;
 	private String login;
@@ -21,6 +29,8 @@ public class User {
 	/* constructor */
 	public User(String login, String password, int role) {
 		super();
+		/* 0 ne représente rien vis à vis de l'ID et du role */
+		this.id_user = 0;
 		this.login = login;
 		this.password = password;
 		this.role = role;
@@ -123,6 +133,38 @@ public class User {
 	}
 
 	/**
+	 * Récupère le login mot de passe pour authentifier l'utilisateur
+	 * 
+	 * @param context
+	 * @param ID
+	 */
+	public void getUserForAuthnetification(Context context) {
+		DatabaseSQLite data = new DatabaseSQLite(context,
+				Constantes.DATABASE_NAME, null, Constantes.DATABASE_VERSION);
+		SQLiteDatabase db = data.getReadableDatabase();
+
+		Cursor monCu;
+
+		String[] COL = { Constantes.USER_ID, Constantes.USER_LOGIN,
+				Constantes.USER_PWD, Constantes.USER_ROLE };
+		String WHERE = Constantes.USER_ID + " = ?";
+		String[] CLAUSE = { String.valueOf(getLogin()),
+				String.valueOf(getPassword()) };
+
+		monCu = db.query(Constantes.TABLE_NAME_USER, COL, WHERE, CLAUSE, null,
+				null, null);
+		if (monCu.moveToFirst() && monCu.getCount() > 0) {
+			do {
+				setId_user(monCu.getInt(0));
+				setLogin(monCu.getString(1));
+				setPassword(monCu.getString(2));
+				setRole(monCu.getInt(3));
+			} while (monCu.moveToNext());
+		}
+		db.close();
+	}
+
+	/**
 	 * Récupère le user depuis son ID pour les listes de logs
 	 * 
 	 * @param context
@@ -136,8 +178,8 @@ public class User {
 		String WHERE = Constantes.USER_ID + " = ?";
 		String[] CLAUSE = { String.valueOf(getId_user()) };
 
-		monCu = db.query(Constantes.TABLE_NAME_USER,
-				COL, WHERE, CLAUSE, null, null, null);
+		monCu = db.query(Constantes.TABLE_NAME_USER, COL, WHERE, CLAUSE, null,
+				null, null);
 		if (monCu.moveToFirst()) {
 			do {
 				setLogin(monCu.getString(1));
@@ -146,7 +188,7 @@ public class User {
 			} while (monCu.moveToNext());
 		}
 	}
-	
+
 	/**
 	 * Mise a jour des données du user
 	 * 

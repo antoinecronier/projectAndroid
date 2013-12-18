@@ -188,7 +188,7 @@ public class Produit {
 				setEtat(monCu.getString(2));
 				setMateriel(monCu.getString(3));
 				setAvancement(monCu.getInt(4));
-				setId_commande(monCu.getInt(5))
+				setId_commande(monCu.getInt(5));
 			} while (monCu.moveToNext());
 		}
 		db.close();
